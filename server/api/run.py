@@ -15,7 +15,8 @@ users = [{
 
 @app.route("/", methods=['GET'])
 def index():
-     return jsonify("Hello World"), 200 
+    data = {'message': 'Hello from Flask API!'}
+    return jsonify(data)
 
 @app.route("/get-user/<user_id>", methods=["GET"])
 def get_user(user_id):
