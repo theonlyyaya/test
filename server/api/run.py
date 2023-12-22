@@ -40,6 +40,18 @@ def create_user():
     users.append(data)
     return jsonify(data), 201
 
+@app.route("/predict-move", methods=["POST"])
+def predictMove(input):
+    data = input.dict()
+    existingData = data
+    
+    # Modele à créer dans ./model/ 
+    # prediction = model.predict(existingData)
+    prediction = [] # temp
+
+    return {
+        'predictedMove': prediction[0]
+    }
 
 if __name__ == '__main__':
      #app.run(host='0.0.0.0', port=5000)
