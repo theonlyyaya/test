@@ -6,7 +6,11 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./tabs/tabs.module').then((m) => m.TabsPageModule),
+  },  {
+    path: 'offline',
+    loadChildren: () => import('./offline/offline.module').then( m => m.OfflinePageModule)
   },
+
 ];
 @NgModule({
   imports: [
