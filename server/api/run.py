@@ -43,7 +43,7 @@ def create_user():
 @app.route("/predict-move", methods=["POST"])
 def predictMove(input):
     data = input.dict()
-    existingData = data
+    existingData = data['board_stat'] # état actuel du plateau
     
     # Modele à créer dans ./model/ 
     # prediction = model.predict(existingData)
