@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reversi Game</title>
+    <style>
+        /* Styles pour les cases */
+        #grid-container {
+            width: 420px; /* Taille fixe du plateau de jeu */
+            display: grid;
+            grid-template-columns: repeat(8, 50px);
+            grid-template-rows: repeat(8, 50px);
+            gap: 2px;
+        }
+
+        button {
+            width: 100%;
+            height: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cell {
+            background-color: #228B22; /* Couleur de base des cases */
+        }
+
+        .white {
+            background-color: #ffffff; /* Couleur des pièces blanches */
+            border-radius: 50%; /* Rend les pièces blanches circulaires */
+        }
+
+        .black {
+            background-color: #000000; /* Couleur des pièces noires */
+            border-radius: 50%; /* Rend les pièces noires circulaires */
+        }
+    </style>
+</head>
+<body>
+    <div id="grid-container"></div>
+
+    <script>
+        class ReversiGrid {
+            constructor() {
+                this.cols = 8;
+                this.rows = 8;
+                this.board = Array.from({ length: 8 }, () => Array(8).fill(' '));
+                this.currentPlayer = 'B';
+                this.initializeBoard();
+            }
+
+            initializeBoard() {
+                const gridContainer = document.getElementById('grid-container');
+
+                for (let row = 0; row < this.rows; row++) {
+                    for (let col = 0; col < this.cols; col++) {
+                        const cell = document.createElement('button');
+                        cell.classList.add('cell');
+                        cell.addEventListener('click', () => this.handleClick(row, col));
+                        gridContainer.appendChild(cell);
+                    }
+                }
+
+                this.placeInitialPieces();
+                this.updateBoard();
+            }
+
+            placeInitialPieces() {
+                this.board[3][3] = 'W';
+                this.board[4][4] = 'W';
+                this.board[3][4] = 'B';
+                this.board[4][3] = 'B';
+
+                this.updateBoard();
+            }
+
+            handleClick(row, col) {
+                if (this.isValidMove(row, col)) {
+                    this.board[row][col] = this.currentPlayer;
+                    this.flipPieces(row, col);
+                    this.updateBoard();
+                    this.currentPlayer = this.currentPlayer === 'B' ? 'W' : 'B';
+                    this.checkEndGame();
+                }
+            }
+
+            isValidMove(row, col) {
+                if (this.board[row][col] !== ' ') {
+                    return false;
+                }
+
+                const directions = [
+                    [-1, -1], [-1, 0], [-1, 1],
+                    [0, -1], [0, 1],
+                    [1, -1], [1, 0], [1, 1]
+                ];
+
+                let validMove = false;
+
+                directions.forEach(([dx, dy]) => {
+                    let r = row + dx;
+                    let c = col + dy;
+                    let toFlip = [];
+
+                    while (r >= 0 && r < this.rows && c >= 0 && c < this.cols && this.board[r][c] !== ' ' && this.board[r][c] !== this.currentPlayer) {
+                        toFlip.push([r, c]);
+                        r += dx;
+                        c += dy;
+                    }
+
+                    if (
+                        r >= 0 && r < this.rows &&
+                        c >= 0 && c < this.cols &&
+                        this.board[r][c] === this.currentPlayer &&
+                        toFlip.length > 0
+                    ) {
+                        toFlip.forEach(([r, c]) => {
+                            this.board[r][c] = this.currentPlayer;
+                        });
+                        validMove = true;
+                    }
+                });
+
+                return validMove;
+            }
+
+            updateBoard() {
+                const gridContainer = document.getElementById('grid-container');
+                const cells = gridContainer.getElementsByTagName('button');
+
+                for (let row = 0; row < this.rows; row++) {
+                    for (let col = 0; col < this.cols; col++) {
+                        const cell = cells[row * this.cols + col];
+                        cell.classList.remove('white', 'black');
+                        if (this.board[row][col] === 'W') {
+                            cell.classList.add('white');
+                        } else if (this.board[row][col] === 'B') {
+                            cell.classList.add('black');
+                        }
+                    }
+                }
+            }
+
+            flipPieces(row, col) {
+              const directions = [
+                  [-1, -1], [-1, 0], [-1, 1],
+                  [0, -1], [0, 1],
+                  [1, -1], [1, 0], [1, 1]
+              ];
+
+              directions.forEach(([dx, dy]) => {
+                  let r = row + dx;
+                  let c = col + dy;
+                  let toFlip = [];
+
+                  while (
+                      r >= 0 && r < this.rows &&
+                      c >= 0 && c < this.cols &&
+                      this.board[r][c] !== ' ' &&
+                      this.board[r][c] !== this.currentPlayer
+                  ) {
+                      toFlip.push([r, c]);
+                      r += dx;
+                      c += dy;
+                  }
+
+                  if (
+                      r >= 0 && r < this.rows &&
+                      c >= 0 && c < this.cols &&
+                      this.board[r][c] === this.currentPlayer &&
+                      toFlip.length > 0
+                  ) {
+                      toFlip.forEach(([r, c]) => {
+                          this.board[r][c] = this.currentPlayer;
+                      });
+                  }
+              });
+            }
+
+            checkEndGame() {
+              let hasValidMoves = false;
+              for (let row = 0; row < this.rows; row++) {
+                for (let col = 0; col < this.cols; col++) {
+                    if (this.isValidMove(row, col)) {
+                        hasValidMoves = true;
+                        break;
+                    }
+                }
+                if (hasValidMoves) {
+                    break;
+                }
+              }
+
+              if (!hasValidMoves) {
+                const blackCount = this.board.reduce((acc, row) => acc + row.filter(cell => cell === 'B').length, 0);
+                const whiteCount = this.board.reduce((acc, row) => acc + row.filter(cell => cell === 'W').length, 0);
+
+                if (blackCount > whiteCount) {
+                    console.log('Black wins!');
+                } else if (whiteCount > blackCount) {
+                    console.log('White wins!');
+                } else {
+                    console.log('It\'s a draw!');
+                }
+              }
+            }
+
+          }
+
+        // Création d'une instance du jeu et initialisation
+        const game = new ReversiGrid();
+      </script>
+  </body>
+</html>

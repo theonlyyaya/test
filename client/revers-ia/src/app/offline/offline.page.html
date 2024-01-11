@@ -13,4 +13,22 @@
       <ion-title size="large">offline</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <ion-content>
+    <ion-label>
+      player 1 vs player 2
+    </ion-label>
+
+    <div class="game-board">
+      <ion-row *ngFor="let row of cells; let i = index">
+        <ion-col *ngFor="let cell of row; let j = index">
+          <ion-button (click)="makeMove(i, j)">
+            {{ cell }}
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-content>
+
 </ion-content>
+
