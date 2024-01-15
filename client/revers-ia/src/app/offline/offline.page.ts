@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 export class OfflinePage implements OnInit {
   cells: string[][] = [];
   private moveMadeSubscription: Subscription = new Subscription();
-  
+
   constructor(
     private apiService: ApiService,
     private alertController: AlertController,
@@ -51,13 +51,58 @@ export class OfflinePage implements OnInit {
   }
 
   makeMove(row: number, col: number) {
-    this.apiService.makeMove(row, col).subscribe((response) => {
-      const winner = response.headers.get('winner');
-      if (winner) {
-        this.displayWinnerMessage(winner);
+    this.apiService.makeMove(row, col).subscribe(
+      (response) => {
+        const winner = response.headers ? response.headers.get('winner') : null;
+        if (winner) {
+          this.displayWinnerMessage(winner);
+        } else {
+          // Continue with the game logic if there is no winner
+          this.apiService.getBoard().subscribe(
+            (board) => {
+              this.cells = board;
+              localStorage.setItem('reversi_board', JSON.stringify(board));
+            },
+            (error) => {
+              console.error('Error fetching board:', error);
+            }
+          );
+        }
+      },
+      (error) => {
+        // Handle errors here
+        console.error('Error making move:', error);
       }
-    });
+    );
   }
+  
+  handleGameOver() {
+    this.alertController.create({
+      header: 'Game Over',
+      message: `The winner is ${this.getWinnerName()}`,
+      buttons: ['OK'],
+    }).then(alert => alert.present());
+  }
+  
+  getWinnerName(): string {
+    const blackCount = this.cells.flat().filter(cell => cell === 'B').length;
+    const whiteCount = this.cells.flat().filter(cell => cell === 'W').length;
+  
+    if (blackCount > whiteCount) {
+      return 'Player 1 (Black)';
+    } else if (whiteCount > blackCount) {
+      return 'Player 2 (White)';
+    } else {
+      return 'It\'s a draw!';
+    }
+  }
+
+  displayWinnerMessage(winner: string) {
+  this.handleGameOver();
+  console.log('Winner:', winner);
+}
+
+  
 
   displayWinnerMessage(winner: string) {
     this.alertController.create({
