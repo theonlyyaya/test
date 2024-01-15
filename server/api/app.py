@@ -134,10 +134,15 @@ def make_move():
     col = data['col']
 
     result = reversi_game.make_move(row, col)
+    # Extract the winner information from the result
+    winner = result.get("winner")
     
     response = jsonify(result)
     response.headers.add('Access-Control-Allow-Origin', '*')  # Adjust the origin based on your requirements
-    
+    if winner:
+        # Add the winner information to the response
+        response.headers.add('winner', winner)
+
     return response
 
 

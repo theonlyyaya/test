@@ -1,7 +1,6 @@
-// offline.page.ts
-
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from '../services/api.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-offline',
@@ -11,7 +10,7 @@ import { ApiService } from '../services/api.service';
 export class OfflinePage implements OnInit {
   cells: string[][] = [];
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService, private alertController: AlertController) {}
 
   ngOnInit() {
     console.log('ngOnInit called');
@@ -34,14 +33,13 @@ export class OfflinePage implements OnInit {
     console.log(`Making move at ${row}, ${col}`);
     this.apiService.makeMove(row, col).subscribe((response) => {
       console.log('Move response:', response);
+      const winner = response.headers.get('winner');
+      if (winner) {
+          this.displayWinnerMessage(winner);
+      }
       this.apiService.getBoard().subscribe(
         (board) => {
           this.cells = board;
-          const winner = response.winner;
-            if (winner) {
-                this.displayWinnerMessage(winner);
-            }
-
             // Save the updated board to local storage
             localStorage.setItem('reversi_board', JSON.stringify(board));
         },
@@ -54,9 +52,14 @@ export class OfflinePage implements OnInit {
   }
 
   displayWinnerMessage(winner: string) {
-    // Display your winner message in the UI
+    // Utilise AlertController pour afficher le message du gagnant dans une popup
+    this.alertController.create({
+      header: 'Game Over',
+      message: `The winner is ${winner === 'B' ? 'Player 1 (Black)' : 'Player 2 (White)'}`,
+      buttons: ['OK']
+    }).then(alert => alert.present());
     console.log('Winner:', winner);
-}
+  }
 
   calculateFloor(i: number): number {
     return Math.floor(i / 8);
@@ -64,5 +67,15 @@ export class OfflinePage implements OnInit {
 
   calculateMod(i: number): number {
     return i % 8;
+  }
+
+  getImagePath(cell: string): string {
+    if (cell === 'B') {
+      return 'https://i.postimg.cc/t4QdpLGT/black-circle.png';
+    }
+    if (cell === 'W') {
+      return 'https://i.postimg.cc/BvwB9tSW/white-circle.png';
+    }
+    return'';
   }
 }
