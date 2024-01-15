@@ -78,8 +78,7 @@ class ReversiGrid(GridLayout):
             elif self.board[row][col] == 'W':
                 child.background_normal = 'white_circle.png' 
     
-    def make_move(self, instance):
-        row, col = self.get_coords(instance)
+    def make_move(self, row, col):  # Remove 'instance' parameter
         if self.is_valid_move(row, col):
             self.board[row][col] = self.current_player
             self.flip_pieces(row, col)
@@ -93,6 +92,8 @@ class ReversiGrid(GridLayout):
                 popup_content = Label(text=winner_text)
                 popup = Popup(title="Game Over", content=popup_content, size_hint=(None, None), size=(400, 200))
                 popup.open()
+                
+        return {"success": True}
             
     def flip_pieces(self, row, col):
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
@@ -130,10 +131,10 @@ def make_move():
     data = request.get_json()
     row = data['row']
     col = data['col']
-    
-    # Your existing logic for making a move goes here
 
-    return jsonify({"success": True})
+    result = reversi_game.make_move(row, col)
+    
+    return jsonify(result)
 
 if __name__ == "__main__":
     reversi_game = ReversiGrid()
