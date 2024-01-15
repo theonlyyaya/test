@@ -1,72 +1,70 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { AlertController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-offline',
   templateUrl: './offline.page.html',
   styleUrls: ['./offline.page.scss'],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class OfflinePage implements OnInit {
   cells: string[][] = [];
-
-  constructor(private apiService: ApiService, private alertController: AlertController) {}
+  private moveMadeSubscription: Subscription = new Subscription();
+  
+  constructor(
+    private apiService: ApiService,
+    private alertController: AlertController,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    console.log('ngOnInit called');
     this.apiService.getBoard().subscribe(
       (board) => {
-        console.log('Board state:', board);
         this.cells = board;
       },
       (error) => {
         console.error('Error fetching board:', error);
       }
     );
-    const storedBoard = localStorage.getItem('reversi_board');
-    if (storedBoard) {
-        this.cells = JSON.parse(storedBoard);
-    }
-  }
 
-  makeMove(row: number, col: number) {
-    console.log(`Making move at ${row}, ${col}`);
-    this.apiService.makeMove(row, col).subscribe((response) => {
-      console.log('Move response:', response);
-      const winner = response.headers.get('winner');
-      if (winner) {
-          this.displayWinnerMessage(winner);
-      }
+    this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
       this.apiService.getBoard().subscribe(
         (board) => {
           this.cells = board;
-            // Save the updated board to local storage
-            localStorage.setItem('reversi_board', JSON.stringify(board));
+          this.changeDetectorRef.markForCheck(); // This marks the component for check
+          localStorage.setItem('reversi_board', JSON.stringify(board));
         },
         (error) => {
           console.error('Error fetching board:', error);
         }
       );
     });
-    
+  }
+
+  ngOnDestroy() {
+    // Unsubscribe to prevent memory leaks
+    if (this.moveMadeSubscription) {
+      this.moveMadeSubscription.unsubscribe();
+    }
+  }
+
+  makeMove(row: number, col: number) {
+    this.apiService.makeMove(row, col).subscribe((response) => {
+      const winner = response.headers.get('winner');
+      if (winner) {
+        this.displayWinnerMessage(winner);
+      }
+    });
   }
 
   displayWinnerMessage(winner: string) {
-    // Utilise AlertController pour afficher le message du gagnant dans une popup
     this.alertController.create({
       header: 'Game Over',
       message: `The winner is ${winner === 'B' ? 'Player 1 (Black)' : 'Player 2 (White)'}`,
-      buttons: ['OK']
-    }).then(alert => alert.present());
-    console.log('Winner:', winner);
-  }
-
-  calculateFloor(i: number): number {
-    return Math.floor(i / 8);
-  }
-
-  calculateMod(i: number): number {
-    return i % 8;
+      buttons: ['OK'],
+    }).then((alert) => alert.present());
   }
 
   getImagePath(cell: string): string {
@@ -74,8 +72,8 @@ export class OfflinePage implements OnInit {
       return 'https://i.postimg.cc/t4QdpLGT/black-circle.png';
     }
     if (cell === 'W') {
-      return 'https://i.postimg.cc/BvwB9tSW/white-circle.png';
+      return 'https://i.postimg.cc/HWRrXXx8/white-circle.png';
     }
-    return'';
+    return '';
   }
 }
