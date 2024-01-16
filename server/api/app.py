@@ -85,7 +85,8 @@ class ReversiGrid(GridLayout):
             self.flip_pieces(row, col)
             self.update_board()
             self.current_player = 'W' if self.current_player == 'B' else 'B'
-            
+            black_count, white_count = self.count_pieces()
+
             # Check if there are no more valid moves
             if not any(self.is_valid_move(row, col) for row in range(8) for col in range(8)):
                 black_count, white_count = self.count_pieces()
@@ -154,7 +155,7 @@ def make_move():
     response.headers.add('Access-Control-Allow-Origin', '*')  # Adjust the origin based on your requirements
     if winner:
         # Add the winner information to the response
-        response.headers.add('winner', winner)
+        response.headers.add('winner', winner) # type: ignore
 
     return response
 

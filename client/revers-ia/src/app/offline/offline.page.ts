@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { ApiService } from '../services/api.service';
 import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-
+import { exec } from 'child_process';
 
 
 @Component({
@@ -84,7 +84,12 @@ export class OfflinePage implements OnInit {
     this.alertController.create({
       header: 'Game Over',
       message: `The winner is ${winner === 'Black' ? 'Player 1 (Black)' : 'Player 2 (White)'}`,
-      buttons: ['Play Again']
+      buttons: [{
+        text: 'Play Again',
+        handler: () => {
+          location.reload();;
+        }
+      }],
     }).then((alert) => alert.present());
     console.log(winner);
   }
