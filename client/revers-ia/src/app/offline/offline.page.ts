@@ -2,8 +2,6 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { ApiService } from '../services/api.service';
 import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
-import { exec } from 'child_process';
-
 
 @Component({
   selector: 'app-offline',
@@ -14,6 +12,8 @@ import { exec } from 'child_process';
 export class OfflinePage implements OnInit {
   cells: string[][] = [];
   private moveMadeSubscription: Subscription = new Subscription();
+  player1Score: number = 0;
+  player2Score: number = 0;
 
   constructor(
     private apiService: ApiService,
@@ -35,6 +35,7 @@ export class OfflinePage implements OnInit {
       this.apiService.getBoard().subscribe(
         (board) => {
           this.cells = board;
+          this.updateScores();
           this.changeDetectorRef.markForCheck(); // This marks the component for check
           localStorage.setItem('reversi_board', JSON.stringify(board));
         },
@@ -63,6 +64,7 @@ export class OfflinePage implements OnInit {
           this.apiService.getBoard().subscribe(
             (board) => {
               this.cells = board;
+              this.updateScores();
               localStorage.setItem('reversi_board', JSON.stringify(board));
             },
             (error) => {
@@ -78,18 +80,27 @@ export class OfflinePage implements OnInit {
     );
   }
 
+  updateScores() {
+    this.player1Score = this.countPieces('B');
+    this.player2Score = this.countPieces('W');
+  }
 
+  countPieces(player: string): number {
+    return this.cells.reduce((count, row) => count + row.filter((cell) => cell === player).length, 0);
+  }
 
   displayWinnerMessage(winner: string) {
     this.alertController.create({
       header: 'Game Over',
       message: `The winner is ${winner === 'Black' ? 'Player 1 (Black)' : 'Player 2 (White)'}`,
-      buttons: [{
-        text: 'Play Again',
-        handler: () => {
-          location.reload();;
-        }
-      }],
+      buttons: [
+        {
+          text: 'Play Again',
+          handler: () => {
+            location.reload();
+          },
+        },
+      ],
     }).then((alert) => alert.present());
     console.log(winner);
   }
