@@ -5,6 +5,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.clock import Clock
 
 app = Flask(__name__)
 CORS(app)
@@ -23,7 +24,7 @@ class ReversiGrid(GridLayout):
         for row in range(8):
             for col in range(8):
                 cell = Button(background_color=(1, 1.8, 1, 1.8))  # Light green background
-                cell.bind(on_press=self.make_move)
+                cell.bind(on_press=self.make_move) # type: ignore
                 
                 if self.board[row][col] == 'B':
                     cell.background_normal = 'black_circle.png'
@@ -78,24 +79,35 @@ class ReversiGrid(GridLayout):
             elif self.board[row][col] == 'W':
                 child.background_normal = 'white_circle.png' 
     
-    def make_move(self, row, col):  # Remove 'instance' parameter
+    def make_move(self, row, col):
         if self.is_valid_move(row, col):
             self.board[row][col] = self.current_player
             self.flip_pieces(row, col)
             self.update_board()
             self.current_player = 'W' if self.current_player == 'B' else 'B'
-            # Vérifie s'il n'y a plus de mouvements possibles
+            
+            # Check if there are no more valid moves
             if not any(self.is_valid_move(row, col) for row in range(8) for col in range(8)):
                 black_count, white_count = self.count_pieces()
                 winner = "Black" if black_count > white_count else "White" if white_count > black_count else "Draw"
+
+                # Use Clock to schedule the UI update on the main thread
+                Clock.schedule_once(lambda dt: self.show_winner_popup(winner), 0)
+
+                # Return the result with winner information
                 return {"success": True, "winner": winner}
-                winner_text = f"The winner is {winner}!"
-                popup_content = Label(text=winner_text)
-                popup = Popup(title="Game Over", content=popup_content, size_hint=(None, None), size=(400, 200))
-                popup.open()
-                
-        return {"success": True}
             
+        # If there are still valid moves, return success without winner information
+        return {"success": True}
+
+    def show_winner_popup(self, winner):
+        # Show the winner information on the main thread
+        winner_text = f"The winner is {winner}!"
+        popup_content = Label(text=winner_text)
+        popup = Popup(title="Game Over", content=popup_content, size_hint=(None, None), size=(400, 200))
+        popup.open()
+
+
     def flip_pieces(self, row, col):
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
         for dx, dy in directions:
@@ -108,11 +120,12 @@ class ReversiGrid(GridLayout):
             if 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] == self.current_player:
                 for r, c in to_flip:
                     self.board[r][c] = self.current_player
-    
+
     def count_pieces(self):
         black_count = sum(row.count('B') for row in self.board)
         white_count = sum(row.count('W') for row in self.board)
-        return black_count, white_count   
+        return black_count, white_count 
+            
 
 # Crée une instance du jeu Reversi
 reversi_game = ReversiGrid() 
@@ -148,4 +161,4 @@ def make_move():
 
 if __name__ == "__main__":
     reversi_game = ReversiGrid()
-    app.run(debug=True, port=5000)  
+    app.run(debug=True, port=5000)

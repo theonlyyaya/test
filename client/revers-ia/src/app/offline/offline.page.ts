@@ -3,6 +3,8 @@ import { ApiService } from '../services/api.service';
 import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
+
+
 @Component({
   selector: 'app-offline',
   templateUrl: './offline.page.html',
@@ -53,7 +55,7 @@ export class OfflinePage implements OnInit {
   makeMove(row: number, col: number) {
     this.apiService.makeMove(row, col).subscribe(
       (response) => {
-        const winner = response.headers ? response.headers.get('winner') : null;
+        const winner = response.winner;
         if (winner) {
           this.displayWinnerMessage(winner);
         } else {
@@ -75,41 +77,16 @@ export class OfflinePage implements OnInit {
       }
     );
   }
-  
-  handleGameOver() {
-    this.alertController.create({
-      header: 'Game Over',
-      message: `The winner is ${this.getWinnerName()}`,
-      buttons: ['OK'],
-    }).then(alert => alert.present());
-  }
-  
-  getWinnerName(): string {
-    const blackCount = this.cells.flat().filter(cell => cell === 'B').length;
-    const whiteCount = this.cells.flat().filter(cell => cell === 'W').length;
-  
-    if (blackCount > whiteCount) {
-      return 'Player 1 (Black)';
-    } else if (whiteCount > blackCount) {
-      return 'Player 2 (White)';
-    } else {
-      return 'It\'s a draw!';
-    }
-  }
 
-  displayWinnerMessage(winner: string) {
-  this.handleGameOver();
-  console.log('Winner:', winner);
-}
 
-  
 
   displayWinnerMessage(winner: string) {
     this.alertController.create({
       header: 'Game Over',
-      message: `The winner is ${winner === 'B' ? 'Player 1 (Black)' : 'Player 2 (White)'}`,
-      buttons: ['OK'],
+      message: `The winner is ${winner === 'Black' ? 'Player 1 (Black)' : 'Player 2 (White)'}`,
+      buttons: ['Play Again']
     }).then((alert) => alert.present());
+    console.log(winner);
   }
 
   getImagePath(cell: string): string {
