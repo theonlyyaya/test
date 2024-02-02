@@ -10,6 +10,14 @@ const routes: Routes = [
     path: 'offline',
     loadChildren: () => import('./offline/offline.module').then( m => m.OfflinePageModule)
   },
+  {
+    path: 'player-vs-ai',
+    loadChildren: () => import('./player-vs-ai/player-vs-ai.module').then( m => m.PlayerVsAiPageModule)
+  },
+  {
+    path: 'ai-vs-ai',
+    loadChildren: () => import('./ai-vs-ai/ai-vs-ai.module').then( m => m.AiVsAiPageModule)
+  },
 
 ];
 @NgModule({
