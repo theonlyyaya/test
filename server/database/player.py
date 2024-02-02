@@ -1,7 +1,7 @@
 from database.connect import db
 from entities.player import Player
 
-players_list = db['players']
+players_table = db['players']
 
 def addPlayer(player):
     return 0
