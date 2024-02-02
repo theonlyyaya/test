@@ -3,6 +3,30 @@
 
 /** Ionic CSS Variables **/
 :root {
+  // Définition de tes couleurs personnalisées
+$custom-primary: #208D3F;
+$custom-secondary: #000000;
+$custom-tertiary: #FFFFFF;
+
+// Override des variables de thème Ionic avec tes couleurs personnalisées
+$colors: (
+  primary: $custom-primary,
+  secondary: $custom-secondary,
+  tertiary: $custom-tertiary,
+  // ... Autres couleurs selon tes besoins
+);
+
+  // Appliquer les couleurs aux boutons
+  $button-primary-background: $custom-primary;
+  $button-primary-color: $custom-tertiary;
+
+  $button-secondary-background: $custom-secondary;
+  $button-secondary-color: $custom-tertiary;
+
+  // Appliquer les couleurs au texte
+  $ion-color-base: $custom-tertiary;
+
+
   /** primary **/
   --ion-color-primary: #2dd36f;
   --ion-color-primary-rgb: 45, 211, 111;

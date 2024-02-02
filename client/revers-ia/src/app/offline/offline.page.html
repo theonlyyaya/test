@@ -1,0 +1,54 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button type="dark" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Offline</ion-title>
+    <ion-button class="round-profile-button">
+      <ion-icon name="person-circle"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/"></ion-back-button>
+      </ion-buttons>
+      <ion-title size="large">offline</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <div class="players">
+      <div>
+        <h2>
+           Player 1 vs Player 2
+        </h2>
+      </div>
+    </div>
+
+    <div class="game-board">
+      <ion-row *ngFor="let row of cells; let i = index">
+        <ion-col *ngFor="let cell of row; let j = index">
+          <ion-button (click)="makeMove(i, j)">
+            <img [src]="getImagePath(cell)">
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div class="scores">
+      <div>
+        <ion-label>Player 1 (Black) Score: {{ player1Score }}</ion-label>
+      </div>
+      <div>
+        <ion-label>Player 2 (White) Score: {{ player2Score }}</ion-label>
+      </div>
+    </div>
+
+  </ion-content>
+
+</ion-content>
+
