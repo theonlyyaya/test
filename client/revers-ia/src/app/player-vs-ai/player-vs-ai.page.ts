@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class PlayerVsAiPage implements OnInit {
-  cells: string[][] = [];
+  cells: number[][] = [];
   private moveMadeSubscription: Subscription = new Subscription();
   player1Score: number = 0;
   player2Score: number = 0;
@@ -81,11 +81,11 @@ export class PlayerVsAiPage implements OnInit {
   }
 
   updateScores() {
-    this.player1Score = this.countPieces('B');
-    this.player2Score = this.countPieces('W');
+    this.player1Score = this.countPieces(-1);
+    this.player2Score = this.countPieces(1);
   }
 
-  countPieces(player: string): number {
+  countPieces(player: number): number {
     return this.cells.reduce((count, row) => count + row.filter((cell) => cell === player).length, 0);
   }
 
@@ -105,11 +105,11 @@ export class PlayerVsAiPage implements OnInit {
     console.log(winner);
   }
 
-  getImagePath(cell: string): string {
-    if (cell === 'B') {
+  getImagePath(cell: number): string {
+    if (cell === -1) {
       return 'https://i.postimg.cc/t4QdpLGT/black-circle.png';
     }
-    if (cell === 'W') {
+    if (cell === 1) {
       return 'https://i.postimg.cc/HWRrXXx8/white-circle.png';
     }
     return '';

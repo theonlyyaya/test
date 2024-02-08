@@ -15,8 +15,8 @@ class ReversiGrid(GridLayout):
         super(ReversiGrid, self).__init__(**kwargs)
         self.cols = 8
         self.rows = 8
-        self.board = [[' ' for _ in range(8)] for _ in range(8)]
-        self.current_player = 'B'
+        self.board = [[0 for _ in range(8)] for _ in range(8)]
+        self.current_player = -1
         self.create_board()
         self.place_initial_pieces()
 
@@ -26,18 +26,18 @@ class ReversiGrid(GridLayout):
                 cell = Button(background_color=(1, 1.8, 1, 1.8))  # Light green background
                 cell.bind(on_press=self.make_move) # type: ignore
                 
-                if self.board[row][col] == 'B':
+                if self.board[row][col] == -1:
                     cell.background_normal = 'black_circle.png'
-                elif self.board[row][col] == 'W':
+                elif self.board[row][col] == 1:
                     cell.background_normal = 'white_circle.png'
                 
                 self.add_widget(cell)
 
     def place_initial_pieces(self):
-        self.board[3][3] = 'W'
-        self.board[4][4] = 'W'
-        self.board[3][4] = 'B'
-        self.board[4][3] = 'B'
+        self.board[3][3] = 1
+        self.board[4][4] = 1
+        self.board[3][4] = -1
+        self.board[4][3] = -1
         for i, child in enumerate(reversed(self.children)):
             row, col = self.get_coords(child)
             if (row, col) in [(3, 3), (4, 4)]:
@@ -52,7 +52,7 @@ class ReversiGrid(GridLayout):
         return row, col
     
     def is_valid_move(self, row, col):
-        if self.board[row][col] != ' ':
+        if self.board[row][col] != 0:
             return False  # La case est déjà occupée, le mouvement est donc invalide
 
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
@@ -61,7 +61,7 @@ class ReversiGrid(GridLayout):
         for dx, dy in directions:
             r, c = row + dx, col + dy
             to_flip = []
-            while 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] != ' ' and self.board[r][c] != self.current_player:
+            while 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] != 0 and self.board[r][c] != self.current_player:
                 to_flip.append((r, c))
                 r += dx
                 c += dy
@@ -74,9 +74,9 @@ class ReversiGrid(GridLayout):
     def update_board(self):
         for i, child in enumerate(reversed(self.children)):
             row, col = self.get_coords(child)
-            if self.board[row][col] == 'B':
+            if self.board[row][col] == -1:
                 child.background_normal = 'black_circle.png'  
-            elif self.board[row][col] == 'W':
+            elif self.board[row][col] == 1:
                 child.background_normal = 'white_circle.png' 
     
     def make_move(self, row, col):
@@ -84,7 +84,7 @@ class ReversiGrid(GridLayout):
             self.board[row][col] = self.current_player
             self.flip_pieces(row, col)
             self.update_board()
-            self.current_player = 'W' if self.current_player == 'B' else 'B'
+            self.current_player = -1 if self.current_player == 1 else 1
             black_count, white_count = self.count_pieces()
 
             # Check if there are no more valid moves
@@ -100,7 +100,7 @@ class ReversiGrid(GridLayout):
             
         # If there are still valid moves, return success without winner information
         return {"success": True}
-
+    
     def show_winner_popup(self, winner):
         # Show the winner information on the main thread
         winner_text = f"The winner is {winner}!"
@@ -114,7 +114,7 @@ class ReversiGrid(GridLayout):
         for dx, dy in directions:
             r, c = row + dx, col + dy
             to_flip = []
-            while 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] != ' ' and self.board[r][c] != self.current_player:
+            while 0 <= r < 8 and 0 <= c < 8 and self.board[r][c] != 0 and self.board[r][c] != self.current_player:
                 to_flip.append((r, c))
                 r += dx
                 c += dy
@@ -123,8 +123,8 @@ class ReversiGrid(GridLayout):
                     self.board[r][c] = self.current_player
 
     def count_pieces(self):
-        black_count = sum(row.count('B') for row in self.board)
-        white_count = sum(row.count('W') for row in self.board)
+        black_count = sum(row.count(-1) for row in self.board)
+        white_count = sum(row.count(1) for row in self.board)
         return black_count, white_count 
             
 
