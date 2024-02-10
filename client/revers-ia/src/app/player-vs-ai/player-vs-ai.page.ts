@@ -53,8 +53,8 @@ export class PlayerVsAiPage implements OnInit {
     }
   }
 
-  makeMove(row: number, col: number) {
-    this.apiService.makeMove(row, col).subscribe(
+  make_one_move(row: number, col: number) {
+    this.apiService.make_one_move(row, col).subscribe(
       (response) => {
         const winner = response.winner;
         if (winner) {
