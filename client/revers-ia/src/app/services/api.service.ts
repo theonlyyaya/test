@@ -32,9 +32,9 @@ export class ApiService {
     );
   }
 
-  make_one_move(row: number, col: number): Observable<any> {
+  make_one_move(): Observable<any> {
     // Make the move and notify subscribers
-    return this.http.post(`${this.apiUrl}/make_one_move`, { row, col }).pipe(
+    return this.http.post(`${this.apiUrl}/make_one_move`, {}).pipe(
       tap(() => {
         this.moveSubject.next();
       })

@@ -30,7 +30,7 @@
     <div class="game-board">
       <ion-row *ngFor="let row of cells; let i = index">
         <ion-col *ngFor="let cell of row; let j = index">
-          <ion-button (click)="make_one_move(i, j)">
+          <ion-button (click)="make_one_move()">
             <img [src]="getImagePath(cell)">
           </ion-button>
         </ion-col>
