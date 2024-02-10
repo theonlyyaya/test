@@ -3,10 +3,8 @@
     <ion-buttons slot="start">
       <ion-back-button type="dark" defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Player VS AI</ion-title>
-    <ion-button class="round-profile-button">
-      <ion-icon name="person-circle"></ion-icon>
-    </ion-button>
+    <ion-title>ReversAI</ion-title>
+    
   </ion-toolbar>
 </ion-header>
 
@@ -24,7 +22,7 @@
     <div class="players">
       <div>
         <h2>
-           Player 1 vs Player 2
+           Artificial Intelligence
         </h2>
       </div>
     </div>
@@ -32,7 +30,7 @@
     <div class="game-board">
       <ion-row *ngFor="let row of cells; let i = index">
         <ion-col *ngFor="let cell of row; let j = index">
-          <ion-button (click)="makeMove(i, j)">
+          <ion-button (click)="make_one_move(i, j)">
             <img [src]="getImagePath(cell)">
           </ion-button>
         </ion-col>
@@ -41,10 +39,10 @@
 
     <div class="scores">
       <div>
-        <ion-label>Player 1 (Black) Score: {{ player1Score }}</ion-label>
+        <ion-label>Black Score: {{ player1Score }}</ion-label>
       </div>
       <div>
-        <ion-label>Player 2 (White) Score: {{ player2Score }}</ion-label>
+        <ion-label>White Score: {{ player2Score }}</ion-label>
       </div>
     </div>
 
