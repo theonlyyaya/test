@@ -25,9 +25,9 @@ ion-content {
 /* Add this style to your global styles or component-specific styles */
 
 .game-board {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 5px;
+  margin: auto;
+  min-width: 515px;
+  max-width: 515px;
 }
 
 ion-button {
@@ -179,4 +179,18 @@ ion-content {
 } 
 
 
+
+.circle {
+  min-width: 30px; 
+  min-height: 30px;
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.cell {
+  min-width: 50px; 
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+}
 

@@ -164,18 +164,17 @@ class ReversiGrid(GridLayout):
 
         model = torch.load(conf['player'],map_location=torch.device('cpu'))
         model.eval()
-        input_seq_boards=input_seq_generator(self.board,model.len_inpout_seq)
+        input_seq_boards = input_seq_generator(self.board,model.len_inpout_seq)
         
         #if black is the current player the board should be multiplay by -1
         if (self.current_player == -1):
             model_input=np.array([input_seq_boards])*-1
         else:
-            model_input=np.array([input_seq_boards])
+            model_input = np.array([input_seq_boards])
         move1_prob = model(torch.tensor(model_input).float().to(device))
         move1_prob = move1_prob.cpu().detach().numpy().reshape(8,8)
-        legal_moves=get_legal_moves(self.board, self.current_player)
+        legal_moves = get_legal_moves(self.board, self.current_player)
         if len(legal_moves) > 0:
-            
             best_move = find_best_move(move1_prob,legal_moves)
             if (self.current_player == -1):
                 print(f"Black: {best_move} < from possible move {legal_moves}")

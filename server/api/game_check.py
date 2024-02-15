@@ -202,14 +202,14 @@ def make_one_move(player, board_stat, turn):
 
     conf={}
     if (player == 'Easy'):
-        conf['player']= 'server\\api\\model_e2205046.pt'
+        conf['player'] = 'server\\api\\model_e2205046.pt'
 
     if torch.cuda.is_available():
         model = torch.load(conf['player'])
     else:
-        model = torch.load(conf['player'],map_location=torch.device('cpu'))
+        model = torch.load(conf['player'], map_location=torch.device('cpu'))
     model.eval()
-    input_seq_boards=input_seq_generator(board_stat,model.len_inpout_seq)
+    input_seq_boards = input_seq_generator(board_stat,model.len_inpout_seq)
     
     #if black is the current player the board should be multiplay by -1
     if (turn == -1):
@@ -217,11 +217,10 @@ def make_one_move(player, board_stat, turn):
     else:
         model_input=np.array([input_seq_boards])
     move1_prob = model(torch.tensor(model_input).float().to(device))
-    move1_prob=move1_prob.cpu().detach().numpy().reshape(8,8)
-    legal_moves=get_legal_moves(board_stat,turn)
+    move1_prob = move1_prob.cpu().detach().numpy().reshape(8,8)
+    legal_moves = get_legal_moves(board_stat,turn)
     if len(legal_moves)>0:
-        
-        best_move=find_best_move(move1_prob,legal_moves)
+        best_move = find_best_move(move1_prob,legal_moves)
         if (turn == -1):
             print(f"Black: {best_move} < from possible move {legal_moves}")
         else:
