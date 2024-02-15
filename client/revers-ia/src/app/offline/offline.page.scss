@@ -50,7 +50,7 @@ ion-button.white {
 
 ion-toolbar {
   background-color: #333; /* Dark background color for the toolbar */
-  color: #f0f0f0; /* Light text color for the toolbar */
+  color: #252525; /* Light text color for the toolbar */
 }
 
 ion-label {
@@ -117,28 +117,66 @@ ion-content {
       }
     }
   }  
-  
-  .players {
-    margin-top: 20px; // espace entre le plateau de jeu et les scores
+
+  .container {
+    display: flex;
+    margin-top: 20px; 
     text-align: center;
-  
-    h2 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #000000; // couleur de fond grise claire
-      padding: 10px; // espacement interne
-      border-radius: 10px;
-      margin: 0 auto; // Centrer horizontalement
-      width: fit-content;
-  
-      ion-label {
-        margin-right: 10px; // espace entre l'étiquette et le score
-        font-weight: bold; // texte en gras
+    justify-content: center;
+    justify-content: space-between;
+    margin-inline: 20%;
+
+      .player-photo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+      }
+      
+      .player1 h3 {
+        display: flex;
+        color: #f0f0f0;
+        align-items: center;
+        justify-content: center;
+        background-color: #000000; // couleur de fond grise claire
+        padding: 10px; // espacement interne
+        border-radius: 10px;
+        margin: 0 auto; // Centrer horizontalement
+        width: fit-content;
+      }
+      .player2 h3 {
+        display: flex;
+        color: #000000;
+        align-items: center;
+        justify-content: center;
+        background-color: #fafafa; // couleur de fond grise claire
+        padding: 10px; // espacement interne
+        border-radius: 10px;
+        margin: 0 auto; // Centrer horizontalement
+        width: fit-content;
+    
+        ion-label {
+          margin-right: 10px; // espace entre l'étiquette et le score
+          font-weight: bold; // texte en gras
+        }
+      }
+      .player-info {
+        display: flex;
+        justify-content: center;
+        justify-content: space-between;
+      
+        .score {
+          margin-inline: 10%;
+          margin-top: auto;
+          margin-bottom: auto;
+          padding:2px;
+          background-color:#a7c2d1 ;
+          background-clip:var(--border-radius);
+          border-radius: 50%;
+        }
       }
     }
-  }
   
-}
+} 
+
 
 
