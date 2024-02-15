@@ -18,8 +18,10 @@ def getPlayer(id_player):
 
 def logIn(email, password):
     player = players_table.find_one(email=email)
-#    if(player.password == password):
-#        return True
+    if(player):
+        player = Player(**(player))
+        if(player.password == password):
+            return True
     return False 
 
 
@@ -33,5 +35,7 @@ def signIn(email, password):
     """
     player = players_table.find_one(email=email)
     if(player):
-        return False
-    return True
+        player = Player(**(player))
+        if(password == player.password):
+            player.password = ''
+    return player

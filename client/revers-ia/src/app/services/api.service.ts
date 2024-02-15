@@ -8,6 +8,7 @@ import { tap } from 'rxjs/operators';
 })
 export class ApiService {
   private apiUrl = 'http://localhost:5000/api';
+  //private apiUrl = 'http://192.168.43.44:5000/api';
 
   // Subject to notify subscribers when a move is made
   private moveSubject = new Subject<void>();
