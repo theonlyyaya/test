@@ -30,7 +30,7 @@
       <ion-row *ngFor="let row of cells; let i = index">
         <ion-col *ngFor="let cell of row; let j = index">
           <ion-button (click)="makeMove(i, j)">
-            <img [src]="getImagePath(cell)">
+            <img weight=30px height=30px [src]="getImagePath(cell)">
           </ion-button>
         </ion-col>
       </ion-row>
