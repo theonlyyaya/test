@@ -22,4 +22,8 @@ export class Tab1Page {
   goToAIVsAIPage() {
     this.router.navigate(['/ai-vs-ai']); // Remplace '/ai-vs-ai' par le chemin de ta page "ai-vs-ai"
   }
+
+  goToHowToPlay() {
+    this.router.navigate(['/how-to-play']); // Remplace '/how-to-play' par le chemin de ta page "how-to-play"
+  }
 }

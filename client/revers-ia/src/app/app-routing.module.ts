@@ -18,6 +18,10 @@ const routes: Routes = [
     path: 'ai-vs-ai',
     loadChildren: () => import('./ai-vs-ai/ai-vs-ai.module').then( m => m.AiVsAiPageModule)
   },
+  {
+    path: 'how-to-play',
+    loadChildren: () => import('./how-to-play/how-to-play.module').then( m => m.HowToPlayPageModule)
+  },
 
 ];
 @NgModule({
