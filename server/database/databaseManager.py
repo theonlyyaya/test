@@ -10,13 +10,16 @@ class DatabaseManager:
         self.primarykey = primarykey
 
     def connect(self):
-        conn = psycopg2.connect(
+        self.conn = psycopg2.connect(
             host = self.host,
             database = self.dbname,
             user = self.user,
             password = self.password
         )
 
-        
-        
-# https://github.com/Ahmed512w/Python-PostgreSQL-CRUD/blob/master/crud.py
+    def insert(self):
+        return 0
+
+    def close(self):
+        self.conn.close()
+
