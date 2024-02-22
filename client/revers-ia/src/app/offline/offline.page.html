@@ -18,14 +18,27 @@
   </ion-header>
 
   <ion-content>
-    <div class="players">
-      <div>
-        <h2>
-           Offline mode
-        </h2>
+    <div class="container">
+      <div class="player">
+          <div class="player-info">
+              <img src="../../assets/joueur1.png" alt="Photo joueur 1" class="player-photo">
+              <div class="score">{{ player1Score }}</div>
+          </div>
+          <div class="player1">
+              <h3>Player 1</h3>
+          </div>
+      </div>
+      <div class="player">
+          <div class="player-info">
+            <div class="score">{{ player2Score }}</div>
+            <img src="../../assets/joueur2.png" alt="Photo joueur 2" class="player-photo">   
+          </div>
+          <div class="player2">
+              <h3>Player 2</h3>
+          </div>
       </div>
     </div>
-
+  
     <div class="game-board">
       <ion-row *ngFor="let row of cells; let i = index">
         <ion-col *ngFor="let cell of row; let j = index">

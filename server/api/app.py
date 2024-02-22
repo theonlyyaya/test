@@ -243,7 +243,7 @@ def make_move():
 
 @app.route('/api/make_one_move', methods=['POST'])
 def make_one_move():
-    row, col = reversi_game.make_one_move("Easy")
+    row, col = reversi_game.make_one_move("Easy")  # type: ignore
     result = reversi_game.make_move(row, col)
     # Extract the winner information from the result
     winner = result.get("winner")
