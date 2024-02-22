@@ -117,6 +117,6 @@ def isBlackWinner(move_array,board_stat,player=-1):
                 else:
                     board_stat[row][col] = board_stat[move[0], move[1]]
                     i += 1
-    is_black_winner=sum(sum(board_stat))<0 
+    is_black_winner=sum(sum(board_stat))<0  # type: ignore
     
     return is_black_winner

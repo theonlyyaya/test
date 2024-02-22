@@ -27,7 +27,7 @@ def get_user(user_id):
 
     extra = request.args.get("extra")
     if extra:
-         user_data["extra"] = extra
+         user_data["extra"] = extra # type: ignore
 
     return jsonify(user_data), 200
 
