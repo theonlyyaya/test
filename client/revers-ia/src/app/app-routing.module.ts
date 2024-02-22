@@ -22,6 +22,14 @@ const routes: Routes = [
     path: 'how-to-play',
     loadChildren: () => import('./how-to-play/how-to-play.module').then( m => m.HowToPlayPageModule)
   },
+  {
+    path: 'choose-disc',
+    loadChildren: () => import('./choose-disc/choose-disc.module').then( m => m.ChooseDiscPageModule)
+  },
+  {
+    path: 'choose-ai-difficulty-vs-player',
+    loadChildren: () => import('./choose-ai-difficulty-vs-player/choose-ai-difficulty-vs-player.module').then( m => m.ChooseAiDifficultyVsPlayerPageModule)
+  },
 
 ];
 @NgModule({
