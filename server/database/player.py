@@ -1,4 +1,5 @@
 from database.connect import db
+from .connect import cur
 from entities.player import Player
 from dataset import Table
 
