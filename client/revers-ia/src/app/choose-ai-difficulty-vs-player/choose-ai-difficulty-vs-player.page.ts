@@ -10,9 +10,11 @@ export class ChooseAiDifficultyVsPlayerPage implements OnInit {
 
   constructor(private router: Router) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
   goHome() {
     this.router.navigate(['/tabs/tab1']);
+  }
+  goToPlayerVsAIPage(difficulty: string) {
+    this.router.navigate(['/player-vs-ai', {difficulty}]); // Remplace '/player-vs-ai' par le chemin de ta page "player-vs-ai"
   }
 }

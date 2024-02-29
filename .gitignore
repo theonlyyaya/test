@@ -28,3 +28,5 @@ google-services.json
 
 # Android Profiling
 *.hprof
+server/api/__pycache__/networks_e2205046.cpython-311.pyc
+server/api/__pycache__/utile.cpython-311.pyc

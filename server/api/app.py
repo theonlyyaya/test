@@ -152,7 +152,7 @@ class ReversiGrid(GridLayout):
         # If there are still valid moves, return success without winner information
         return {"success": True}
     
-    def make_one_move(self, player):
+    def make_one_move(self, player): # player = difficulty (type of AI)
     # player: model description
     # board_stat: current 8x8 board status
     # turn: 1 or -1 - black or white turn
@@ -160,7 +160,11 @@ class ReversiGrid(GridLayout):
 
         conf = {}
         if (player == 'Easy'):
-            conf['player']= 'server\\api\\model_e2205046.pt'
+            conf['player']= 'server\\api\\Easy.pt'
+        elif (player == 'Medium'):
+            conf['player']= 'server\\api\\Medium.pt'
+        elif (player == 'Hard'):
+            conf['player']= 'server\\api\\Hard.pt'
 
         model = torch.load(conf['player'],map_location=torch.device('cpu'))
         model.eval()
@@ -243,7 +247,9 @@ def make_move():
 
 @app.route('/api/make_one_move', methods=['POST'])
 def make_one_move():
-    row, col = reversi_game.make_one_move("Easy")  # type: ignore
+    data = request.get_json()
+    difficulty = data['difficulty']
+    row, col = reversi_game.make_one_move(difficulty)
     result = reversi_game.make_move(row, col)
     # Extract the winner information from the result
     winner = result.get("winner")
