@@ -21,7 +21,7 @@ class DatabaseManager:
         )
         self.cur = self.conn.cursor()
 
-    def execute(self, query, placeholder_value = None):
+    def execute(self, query, placeHolderValues = None):
         return 0
 
     # ============
@@ -40,8 +40,12 @@ class DatabaseManager:
     
     def select(self, columns, pk = None):
         if pk == None:
-            print()
-            # à faire
+            select_query = sql.SQL("SELECT {} FROM {}").format(
+                sql.SQL(', ').join(map(sql.Identifier, columns)),
+                sql.Identifier(self.table)
+            )
+
+            self.execute(select_query)
         else:
             select_query = sql.SQL("SELECT {} FROM {} WHERE {} = {}").format(
                 sql.SQL(', ').join(map(sql.Identifier, columns)),
@@ -49,9 +53,10 @@ class DatabaseManager:
                 sql.Identifier(self.primarykey),
                 sql.Placeholder()
             )   
+
             self.execute(select_query, pk)
 
-    def update(self, column, column_value, pk):
+    def update_column(self, column, column_value, pk):
         update_query = sql.SQL("UPDATE {} SET {} = {} WHERE {} = {}").format(
             sql.Identifier(self.table),
             sql.Identifier(column),
@@ -59,8 +64,23 @@ class DatabaseManager:
             sql.Identifier(self.primarykey),
             sql.Placeholder()
         )
+
         self.execute(update_query, (column_value, pk))
     
+    def update_multiple_columns(self, columns, columns_value, pk):
+        update_query = sql.SQL("UPDATE {} SET ({}) = ({}) WHERE {} = {}").format(
+            sql.Identifier(self.table),
+            sql.SQL(',').join(map(sql.Identifier, columns)),
+            sql.SQL(', ').join(sql.Placeholder() * len(columns_value)),
+            sql.Identifier(self.primarykey),
+            sql.Placeholder()
+        )
+
+        placeHolderValues = list(columns_value)
+        placeHolderValues.append(pk)
+        placeHolderValues = tuple(placeHolderValues)
+        self.execute(update_query, placeHolderValues)
+
     def delete(self, pk):
         delete_query = sql.SQL("DELETE FROM {} WHERE {} = {}").format(
             sql.Identifier(self.table),
@@ -70,7 +90,7 @@ class DatabaseManager:
 
         self.execute(delete_query, pk)
     
-
+    # Close connection
     def close(self, commit = False):
         self.cur.close()
         self.conn.close()
