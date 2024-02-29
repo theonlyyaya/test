@@ -1,3 +1,4 @@
+from logging import PlaceHolder
 import psycopg2
 import psycopg2.sql as sql
 
@@ -36,16 +37,38 @@ class DatabaseManager:
 
         record_to_insert = tuple(column_value.values())
         self.execute(insert_query, record_to_insert)
-        return 0
     
-    def select(self):
-        return 0
+    def select(self, columns, pk = None):
+        if pk == None:
+            print()
+            # à faire
+        else:
+            select_query = sql.SQL("SELECT {} FROM {} WHERE {} = {}").format(
+                sql.SQL(', ').join(map(sql.Identifier, columns)),
+                sql.Identifier(self.table),
+                sql.Identifier(self.primarykey),
+                sql.Placeholder()
+            )   
+            self.execute(select_query, pk)
 
-    def update(self):
-        return 0
+    def update(self, column, column_value, pk):
+        update_query = sql.SQL("UPDATE {} SET {} = {} WHERE {} = {}").format(
+            sql.Identifier(self.table),
+            sql.Identifier(column),
+            sql.Placeholder(),
+            sql.Identifier(self.primarykey),
+            sql.Placeholder()
+        )
+        self.execute(update_query, (column_value, pk))
     
-    def delete(self):
-        return 0
+    def delete(self, pk):
+        delete_query = sql.SQL("DELETE FROM {} WHERE {} = {}").format(
+            sql.Identifier(self.table),
+            sql.Identifier(self.primarykey),
+            sql.Placeholder()
+        )
+
+        self.execute(delete_query, pk)
     
 
     def close(self, commit = False):
