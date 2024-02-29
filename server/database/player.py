@@ -1,16 +1,24 @@
-from database.connect import db
+
 from .databaseManager import DatabaseManager
 from entities.player import Player
-from dataset import Table
 
-player = DatabaseManager('','','','','','')
 
-players_table = Table(db, 'players')
+player = DatabaseManager(
+    'postgres',
+    'root',
+    'localhost',
+    '5432',
+    'reversia',
+    'Player',
+    'id_player'
+    )
+
+players_table = player.select_all()
 
 def addPlayer(player):
     found = getPlayer(player.id_player)
     if not found:
-        players_table.insert(dict(player))
+        player.insert(dict(player))
     return 0
 
 def getPlayer(id_player):
@@ -27,6 +35,11 @@ def logIn(email, password):
             return True
     return False 
 
+def logIn(email, password):
+    player = players_table.find_one(email=email)
+
+def find_one(string):
+    return string
 
 
 def signIn(email, password):

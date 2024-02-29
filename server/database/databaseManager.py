@@ -1,4 +1,3 @@
-from logging import PlaceHolder
 import psycopg2
 import psycopg2.sql as sql
 
@@ -22,10 +21,13 @@ class DatabaseManager:
         self.cur = self.conn.cursor()
 
     def execute(self, query, placeHolderValues = None):
-        return 0
+        if placeHolderValues == None or None in placeHolderValues:
+            self.cur.execute(query)
+        else:
+            self.cur.execute(query, placeHolderValues)
 
     # ============
-    # CRUD methods
+    # CRUD methods        
     # ============
 
     def insert(self, **column_value):
@@ -55,6 +57,18 @@ class DatabaseManager:
             )   
 
             self.execute(select_query, pk)
+        
+        selected = self.cur.fetchall()
+        return selected
+
+    def select_all(self):
+        select_querry = sql.SQL("SELECT * FROM {}").format(
+            sql.Identifier(self.table)
+        )
+
+        self.execute(select_querry)
+        selected = self.cur.fetchall()
+        return selected
 
     def update_column(self, column, column_value, pk):
         update_query = sql.SQL("UPDATE {} SET {} = {} WHERE {} = {}").format(
@@ -70,7 +84,7 @@ class DatabaseManager:
     def update_multiple_columns(self, columns, columns_value, pk):
         update_query = sql.SQL("UPDATE {} SET ({}) = ({}) WHERE {} = {}").format(
             sql.Identifier(self.table),
-            sql.SQL(',').join(map(sql.Identifier, columns)),
+            sql.SQL(', ').join(map(sql.Identifier, columns)),
             sql.SQL(', ').join(sql.Placeholder() * len(columns_value)),
             sql.Identifier(self.primarykey),
             sql.Placeholder()
@@ -90,6 +104,8 @@ class DatabaseManager:
 
         self.execute(delete_query, pk)
     
+    # ============
+
     # Commit changes
     def commit(self):
         self.conn.commit()
