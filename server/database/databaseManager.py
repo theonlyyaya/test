@@ -90,9 +90,15 @@ class DatabaseManager:
 
         self.execute(delete_query, pk)
     
+    # Commit changes
+    def commit(self):
+        self.conn.commit()
+
     # Close connection
     def close(self, commit = False):
-        self.cur.close()
-        self.conn.close()
-
-
+        if commit:
+            self.commit()
+        else:
+            self.cur.close()
+            self.conn.close()
+            
