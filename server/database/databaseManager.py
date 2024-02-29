@@ -20,12 +20,22 @@ class DatabaseManager:
         )
         self.cur = self.conn.cursor()
 
+    def execute(self, query, placeholder_value = None):
+        return 0
+
     # ============
     # CRUD methods
     # ============
 
-    def insert(self):
-        insert_query = sql.SQL("INSERT INTO {} ({}) VALUES ({})")
+    def insert(self, **column_value):
+        insert_query = sql.SQL("INSERT INTO {} ({}) VALUES ({})".format(
+            sql.Identifier(self.table),
+            sql.SQL(', ').join(map(sql.Identifier, column_value.keys())),
+            sql.SQL(', ').join(sql.Placeholder() * len(column_value.values()))
+        ))
+
+        record_to_insert = tuple(column_value.values())
+        self.execute(insert_query, record_to_insert)
         return 0
     
     def select(self):
