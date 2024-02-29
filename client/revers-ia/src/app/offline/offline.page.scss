@@ -24,9 +24,12 @@ ion-content {
 
 .game-board {
   margin: auto;
-  min-width: 515px;
-  max-width: 515px;
+  width: 80vw; /* Utilise 80% de la largeur de la vue */
+  height: 80vw; /* Utilise 80% de la hauteur de la vue */
+  max-width: 515px; /* Taille maximale en pixels */
+  max-height: 515px; /* Taille maximale en pixels */
 }
+
 
 ion-button {
   width: 100%;
@@ -138,7 +141,27 @@ ion-content {
     .player-info {
       display: flex;
       justify-content: center;
+
+      .player-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 15px solid yellow; /* Couleur de la flèche */
+      }
       
+      .player1-arrow {
+        top: 13.2%; /* Position de la flèche par rapport au joueur 1 */
+        rotate: 270deg;
+        right: 50%;
+      }
+      
+      .player2-arrow {
+        top: 13.2%;  /* Position de la flèche par rapport au joueur 2 */
+        rotate: 90deg;
+        left:50%;
+      }  
     
       .score {
         font-size: larger;
@@ -162,16 +185,17 @@ ion-content {
   
 
 .circle {
-  min-width: 30px; 
-  min-height: 30px;
-  max-width: 30px;
-  max-height: 30px;
+  width: 4vw; /* Utilise 4% de la largeur de la vue pour chaque pion */
+  height: 4vw; /* Utilise 4% de la hauteur de la vue pour chaque pion */
+  max-width: 30px; /* Taille maximale en pixels */
+  max-height: 30px; /* Taille maximale en pixels */
 }
 
+
 .cell {
-  min-width: 50px; 
-  min-height: 50px;
-  max-width: 50px;
-  max-height: 50px;
+  width: 8vw; /* Utilise 8% de la largeur de la vue pour chaque cellule */
+  height: 8vw; /* Utilise 8% de la hauteur de la vue pour chaque cellule */
+  max-width: 50px; /* Taille maximale en pixels */
+  max-height: 50px; /* Taille maximale en pixels */
 }
 

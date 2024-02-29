@@ -14,36 +14,16 @@ export class OfflinePage implements OnInit {
   private moveMadeSubscription: Subscription = new Subscription();
   player1Score: number = 0;
   player2Score: number = 0;
+  activePlayer: number = -1; // Par défaut, le joueur 1 est actif
 
   constructor(
     private apiService: ApiService,
-    private alertController: AlertController,
-    private changeDetectorRef: ChangeDetectorRef
-  ) {}
+    private alertController: AlertController  ) {}
 
   ngOnInit() {
-    this.apiService.getBoard().subscribe(
-      (board) => {
-        this.cells = board;
-      },
-      (error) => {
-        console.error('Error fetching board:', error);
-      }
-    );
-
-    this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
-      this.apiService.getBoard().subscribe(
-        (board) => {
-          this.cells = board;
-          this.updateScores();
-          this.changeDetectorRef.markForCheck(); // This marks the component for check
-          localStorage.setItem('reversi_board', JSON.stringify(board));
-        },
-        (error) => {
-          console.error('Error fetching board:', error);
-        }
-      );
-    });
+    // Initialize the board and subscribe to move events
+    this.initBoard();
+    this.subscribeToMoves();
   }
 
   ngOnDestroy() {
@@ -51,6 +31,34 @@ export class OfflinePage implements OnInit {
     if (this.moveMadeSubscription) {
       this.moveMadeSubscription.unsubscribe();
     }
+  }
+
+  initBoard() {
+    this.apiService.getBoard().subscribe(
+      (board) => {
+        this.cells = board;
+        this.updateScores();
+      },
+      (error) => {
+        console.error('Error fetching board:', error);
+      }
+    );
+  }
+
+  subscribeToMoves() {
+    this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
+      this.apiService.getBoard().subscribe(
+        (board) => {
+          this.cells = board;
+          this.updateScores();
+          this.toggleTurn(); // Change the turn after each move
+          localStorage.setItem('reversi_board', JSON.stringify(board));
+        },
+        (error) => {
+          console.error('Error fetching board:', error);
+        }
+      );
+    });
   }
 
   makeMove(row: number, col: number) {
@@ -61,16 +69,7 @@ export class OfflinePage implements OnInit {
           this.displayWinnerMessage(winner);
         } else {
           // Continue with the game logic if there is no winner
-          this.apiService.getBoard().subscribe(
-            (board) => {
-              this.cells = board;
-              this.updateScores();
-              localStorage.setItem('reversi_board', JSON.stringify(board));
-            },
-            (error) => {
-              console.error('Error fetching board:', error);
-            }
-          );
+          this.initBoard();
         }
       },
       (error) => {
@@ -87,6 +86,11 @@ export class OfflinePage implements OnInit {
 
   countPieces(player: number): number {
     return this.cells.reduce((count, row) => count + row.filter((cell) => cell === player).length, 0);
+  }
+
+  toggleTurn() {
+    // Changer le joueur actif
+    this.activePlayer *= -1;
   }
 
   displayWinnerMessage(winner: string) {
