@@ -1,7 +1,9 @@
 from database.connect import db
-from .connect import cur
+from .databaseManager import DatabaseManager
 from entities.player import Player
 from dataset import Table
+
+player = DatabaseManager('','','','','','')
 
 players_table = Table(db, 'players')
 

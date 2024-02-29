@@ -67,6 +67,18 @@ cur.execute("""
     )
 """)
 
+# Création de la table Participation
+# Association entre un opposant et une partie.
+cur.execute("""
+    CREATE TABLE Participation(
+    id_opponent INT,
+    id_game INT,
+    PRIMARY KEY(id_opponent, id_game),
+    FOREIGN KEY(id_opponent) REFERENCES Opponent(id_opponent),
+    FOREIGN KEY(id_game) REFERENCES Game(id_game)
+    )
+""")
+
 cur.close()
 conn.commit()
 conn.close()
