@@ -1,7 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { ApiService } from '../services/api.service';
 import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-player-vs-ai',
@@ -14,11 +16,13 @@ export class PlayerVsAiPage implements OnInit {
   private moveMadeSubscription: Subscription = new Subscription();
   player1Score: number = 0;
   player2Score: number = 0;
+  difficulty: string = '';
 
   constructor(
     private apiService: ApiService,
     private alertController: AlertController,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -44,6 +48,10 @@ export class PlayerVsAiPage implements OnInit {
         }
       );
     });
+    // Difficulty chosen at choose-ai-difficulty-vs-player.page
+    this.route.params.subscribe(params => {
+      this.difficulty = params['difficulty'];
+    })
   }
 
   ngOnDestroy() {
@@ -53,8 +61,8 @@ export class PlayerVsAiPage implements OnInit {
     }
   }
 
-  make_one_move() {
-    this.apiService.make_one_move().subscribe(
+  makeOneMove(difficulty: string) {
+    this.apiService.makeOneMove(difficulty).subscribe(
       (response) => {
         const winner = response.winner;
         if (winner) {
@@ -114,5 +122,6 @@ export class PlayerVsAiPage implements OnInit {
     }
     return '';
   }
+  
 }
 
