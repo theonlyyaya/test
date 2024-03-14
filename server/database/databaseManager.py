@@ -12,20 +12,26 @@ class DatabaseManager:
         self.primarykey = primarykey
 
     def connect(self):
-        self.conn = psycopg2.connect(
-            host = self.host,
-            database = self.dbname,
-            user = self.user,
-            password = self.password
-        )
-        self.cur = self.conn.cursor()
+        try:
+            self.conn = psycopg2.connect(
+                host = self.host,
+                database = self.dbname,
+                user = self.user,
+                password = self.password
+            )
+            self.cur = self.conn.cursor()
+            print("\n-# Connection & transaction with PostgreSQL : ON\n")
+        except(Exception, psycopg2.Error) as error:
+            print("Error while connecting to PostgreSQL : ", error)
 
     def execute(self, query, placeHolderValues = None):
         self.check_connection()
         if placeHolderValues == None or None in placeHolderValues:
             self.cur.execute(query)
+            print("-# " + query.as_string(self.conn) + ";\n")
         else:
             self.cur.execute(query, placeHolderValues)
+            print("-# " + query.as_string(self.conn) % placeHolderValues + ";\n")
 
     # ============
     # CRUD methods        
@@ -127,4 +133,5 @@ class DatabaseManager:
         else:
             self.cur.close()
             self.conn.close()
+            print("\n-# Connection & transaction with PostgreSQL : OFF\n")
             
