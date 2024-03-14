@@ -30,4 +30,4 @@ google-services.json
 *.hprof
 
 # Python Cache
-server/api/__pycache__
+.server/api/__pycache__
