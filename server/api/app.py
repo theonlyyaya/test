@@ -249,7 +249,7 @@ def make_move():
 def make_one_move():
     data = request.get_json()
     difficulty = data['difficulty']
-    row, col = reversi_game.make_one_move(difficulty)
+    row, col = reversi_game.make_one_move(difficulty) # type: ignore
     result = reversi_game.make_move(row, col)
     # Extract the winner information from the result
     winner = result.get("winner")
