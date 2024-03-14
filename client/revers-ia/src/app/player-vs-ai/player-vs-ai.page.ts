@@ -66,8 +66,8 @@ export class PlayerVsAiPage implements OnInit {
     }
   }
 
-  makeOneMove(playerDisc: string, difficulty: string) {
-    this.apiService.makeOneMove(playerDisc, difficulty).subscribe(
+  makeOneMove(playerDisc: string, difficulty: string, row: number, col: number) {
+    this.apiService.makeOneMove(playerDisc, difficulty, row, col).subscribe(
       (response) => {
         const winner = response.winner;
         if (winner) {

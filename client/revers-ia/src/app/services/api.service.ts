@@ -32,9 +32,9 @@ export class ApiService {
     );
   }
 
-  makeOneMove(playerDisc: string, difficulty: string): Observable<any> {
+  makeOneMove(playerDisc: string, difficulty: string, row: number, col: number): Observable<any> {
     // Make the move and notify subscribers
-    return this.http.post(`${this.apiUrl}/make_one_move`, { playerDisc, difficulty }).pipe(
+    return this.http.post(`${this.apiUrl}/make_one_move`, { playerDisc, difficulty, row, col }).pipe(
       tap(() => {
         this.moveSubject.next();
       })

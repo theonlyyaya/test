@@ -67,7 +67,7 @@ class ReversiGrid(GridLayout):
         self.cols = 8
         self.rows = 8
         self.board = [[0 for _ in range(8)] for _ in range(8)]
-        self.current_player = -1
+        self.current_player = -1 # -1 is black, 1 is white
         self.create_board()
         self.place_initial_pieces()
 
@@ -152,10 +152,13 @@ class ReversiGrid(GridLayout):
         # If there are still valid moves, return success without winner information
         return {"success": True}
     
-    def make_one_move(self, disc, player): # player = difficulty (type of AI)
+    def make_one_move(self, playerDisc, player): # player = difficulty (type of AI)
     # player: model description
     # board_stat: current 8x8 board status
     # turn: 1 or -1 - black or white turn
+        # if current move is for player, skip
+        if ((self.current_player == -1 and playerDisc == 'Black') or (self.current_player == 1 and playerDisc == 'White')):
+            return -1, -1
         device = torch.device("cpu")
 
         conf = {}
@@ -165,10 +168,11 @@ class ReversiGrid(GridLayout):
             conf['player']= 'server\\api\\Medium.pt'
         elif (player == 'Hard'):
             conf['player']= 'server\\api\\Hard.pt'
-
+        
         model = torch.load(conf['player'],map_location=torch.device('cpu'))
         model.eval()
         input_seq_boards = input_seq_generator(self.board,model.len_inpout_seq)
+        
         
         #if black is the current player the board should be multiplay by -1
         if (self.current_player == -1):
@@ -251,6 +255,9 @@ def make_one_move():
     difficulty = data['difficulty']
     playerDisc = data['playerDisc']
     row, col = reversi_game.make_one_move(playerDisc, difficulty)
+    if (row == -1 or col == -1):
+        row = data['row']
+        col = data['col']
     result = reversi_game.make_move(row, col)
     # Extract the winner information from the result
     winner = result.get("winner")
