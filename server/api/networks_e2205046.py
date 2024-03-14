@@ -224,20 +224,20 @@ class MLP(nn.Module):
             self.eval()
             
             train_clas_rep=self.evalulate(train, device)
-            acc_train=train_clas_rep["weighted avg"]["recall"]
+            acc_train=train_clas_rep["weighted avg"]["recall"] # type: ignore
             train_acc_list.append(acc_train)
             
             dev_clas_rep=self.evalulate(dev, device)
-            acc_dev=dev_clas_rep["weighted avg"]["recall"]
+            acc_dev=dev_clas_rep["weighted avg"]["recall"] # type: ignore
             dev_acc_list.append(acc_dev)
             
             last_prediction=time.time()-last_training-start_time
             
-            print(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;",
+            print(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;", # type: ignore
                   f"Time: {round(time.time()-init_time)}",
                   f"(last_train: {round(last_training)}sec, last_pred: {round(last_prediction)}sec)")
             f = open(f'{self.path_save} logs.txt', 'a', encoding='utf-8')
-            f.write(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;" +
+            f.write(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;" + # type: ignore
                   f" Time: {round(time.time()-init_time)}" +
                   f" (last_train: {round(last_training)}sec, last_pred: {round(last_prediction)}sec)")
             f.write("\n")
@@ -257,9 +257,9 @@ class MLP(nn.Module):
                 
             self.train()
             
-            print("*"*15,f"The best score on DEV {best_epoch}: {round(100*best_dev,3)}%")
+            print("*"*15,f"The best score on DEV {best_epoch}: {round(100*best_dev,3)}%") # type: ignore
             f = open(f'{self.path_save} logs.txt', 'a', encoding='utf-8')
-            f.write("*"*15 + f" The best score on DEV {best_epoch}: {round(100*best_dev,3)}%")
+            f.write("*"*15 + f" The best score on DEV {best_epoch}: {round(100*best_dev,3)}%") # type: ignore
             f.write("\n")
             f.close()
 
@@ -520,20 +520,20 @@ class LSTMs(nn.Module):
             self.eval()
             
             train_clas_rep=self.evalulate(train, device)
-            acc_train=train_clas_rep["weighted avg"]["recall"]
+            acc_train=train_clas_rep["weighted avg"]["recall"] # type: ignore
             train_acc_list.append(acc_train)
             
             dev_clas_rep=self.evalulate(dev, device)
-            acc_dev=dev_clas_rep["weighted avg"]["recall"]
+            acc_dev=dev_clas_rep["weighted avg"]["recall"] # type: ignore
             dev_acc_list.append(acc_dev)
             
             last_prediction=time.time()-last_training-start_time
             
-            print(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;",
+            print(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;", # type: ignore
                   f"Time: {round(time.time()-init_time)}",
                   f"(last_train: {round(last_training)}, last_pred: {round(last_prediction)})")
             f = open(f'{self.path_save} logs.txt', 'a', encoding='utf-8')
-            f.write(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ; Time: {round(time.time()-init_time)} (last_train: {round(last_training)}, last_pred: {round(last_prediction)})")
+            f.write(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ; Time: {round(time.time()-init_time)} (last_train: {round(last_training)}, last_pred: {round(last_prediction)})") # type: ignore
             f.write("\n")
             f.close()
 
@@ -551,9 +551,9 @@ class LSTMs(nn.Module):
                 
             self.train()
             
-            print("*"*15,f"The best score on DEV {best_epoch}: {round(100*best_dev,3)}%")
+            print("*"*15,f"The best score on DEV {best_epoch}: {round(100*best_dev,3)}%") # type: ignore
             f = open(f'{self.path_save} logs.txt', 'a', encoding='utf-8')
-            f.write("*"*15 + f" The best score on DEV {best_epoch}: {round(100*best_dev,3)}%")
+            f.write("*"*15 + f" The best score on DEV {best_epoch}: {round(100*best_dev,3)}%") # type: ignore
             f.write("\n")
             f.close()
 
@@ -792,20 +792,20 @@ class CNN(nn.Module):
             self.eval()
             
             train_clas_rep=self.evalulate(train, device)
-            acc_train=train_clas_rep["weighted avg"]["recall"]
+            acc_train=train_clas_rep["weighted avg"]["recall"] # type: ignore
             train_acc_list.append(acc_train)
             
             dev_clas_rep=self.evalulate(dev, device)
-            acc_dev=dev_clas_rep["weighted avg"]["recall"]
+            acc_dev=dev_clas_rep["weighted avg"]["recall"] # type: ignore
             dev_acc_list.append(acc_dev)
             
             last_prediction=time.time()-last_training-start_time
             
-            print(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;",
+            print(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;", # type: ignore
                   f"Time: {round(time.time()-init_time)}",
                   f"(last_train: {round(last_training)}sec, last_pred: {round(last_prediction)}sec)")
             f = open(f'{self.path_save} logs.txt', 'a', encoding='utf-8')
-            f.write(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;" +
+            f.write(f"Accuracy Train: {round(100*acc_train,2)}%, Dev: {round(100*acc_dev,2)}% ;" + # type: ignore
                   f" Time: {round(time.time()-init_time)}" +
                   f" (last_train: {round(last_training)}sec, last_pred: {round(last_prediction)}sec)")
             f.write("\n")
@@ -825,9 +825,9 @@ class CNN(nn.Module):
                 
             self.train()
             
-            print("*"*15,f"The best score on DEV {best_epoch}: {round(100*best_dev,3)}%")
+            print("*"*15,f"The best score on DEV {best_epoch}: {round(100*best_dev,3)}%") # type: ignore
             f = open(f'{self.path_save} logs.txt', 'a', encoding='utf-8')
-            f.write("*"*15 + f" The best score on DEV {best_epoch}: {round(100*best_dev,3)}%")
+            f.write("*"*15 + f" The best score on DEV {best_epoch}: {round(100*best_dev,3)}%") # type: ignore
             f.write("\n")
             f.close()
 
