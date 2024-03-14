@@ -47,8 +47,8 @@ class DatabaseManager:
         record_to_insert = tuple(column_value.values())
         self.execute(insert_query, record_to_insert)
     
-    def select(self, columns, pk = None):
-        if pk == None:
+    def select(self, columns, searchKey = None, searchKeyValue = None):
+        if searchKey == None:
             select_query = sql.SQL("SELECT {} FROM {}").format(
                 sql.SQL(', ').join(map(sql.Identifier, columns)),
                 sql.Identifier(self.table)
@@ -59,11 +59,11 @@ class DatabaseManager:
             select_query = sql.SQL("SELECT {} FROM {} WHERE {} = {}").format(
                 sql.SQL(', ').join(map(sql.Identifier, columns)),
                 sql.Identifier(self.table),
-                sql.Identifier(self.primarykey),
+                sql.Placeholder(),
                 sql.Placeholder()
             )   
 
-            self.execute(select_query, pk)
+            self.execute(select_query, (searchKey, searchKeyValue))
         
         selected = self.cur.fetchall()
         return selected
