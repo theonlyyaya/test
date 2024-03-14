@@ -14,8 +14,8 @@ export class Tab1Page {
   goToOfflinePage() {
     this.router.navigate(['/offline']); // Remplace '/offline' par le chemin de ta page "offline"
   }
-  GoToChooseAIDifficultyVSPlayer() {
-    this.router.navigate(['/choose-ai-difficulty-vs-player']);
+  GoToChoosePlayerDisc() {
+    this.router.navigate(['/choose-disc']);
   }
 
   goToAIVsAIPage() {

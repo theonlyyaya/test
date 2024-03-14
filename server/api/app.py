@@ -152,7 +152,7 @@ class ReversiGrid(GridLayout):
         # If there are still valid moves, return success without winner information
         return {"success": True}
     
-    def make_one_move(self, player): # player = difficulty (type of AI)
+    def make_one_move(self, disc, player): # player = difficulty (type of AI)
     # player: model description
     # board_stat: current 8x8 board status
     # turn: 1 or -1 - black or white turn
@@ -249,7 +249,8 @@ def make_move():
 def make_one_move():
     data = request.get_json()
     difficulty = data['difficulty']
-    row, col = reversi_game.make_one_move(difficulty)
+    playerDisc = data['playerDisc']
+    row, col = reversi_game.make_one_move(playerDisc, difficulty)
     result = reversi_game.make_move(row, col)
     # Extract the winner information from the result
     winner = result.get("winner")

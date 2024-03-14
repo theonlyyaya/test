@@ -15,4 +15,7 @@ export class ChooseDiscPage implements OnInit {
   goHome() {
     this.router.navigate(['/tabs/tab1']);
   }
+  GoToChooseAIDifficultyVSPlayer(playerDisc: string) {
+    this.router.navigate(['/choose-ai-difficulty-vs-player', {playerDisc}]);
+  }
 }
