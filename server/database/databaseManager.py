@@ -1,4 +1,4 @@
-import psycopg2
+import psycopg2, sys
 import psycopg2.sql as sql
 
 class DatabaseManager:
@@ -21,6 +21,7 @@ class DatabaseManager:
         self.cur = self.conn.cursor()
 
     def execute(self, query, placeHolderValues = None):
+        self.check_connection()
         if placeHolderValues == None or None in placeHolderValues:
             self.cur.execute(query)
         else:
@@ -106,12 +107,21 @@ class DatabaseManager:
     
     # ============
 
+    def check_connection(self):
+        try:
+            self.conn
+        except AttributeError:
+            sys.exit()
+
+
     # Commit changes
     def commit(self):
+        self.check_connection()
         self.conn.commit()
 
     # Close connection
     def close(self, commit = False):
+        self.check_connection()
         if commit:
             self.commit()
         else:
