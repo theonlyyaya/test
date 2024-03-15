@@ -185,10 +185,10 @@ ion-content {
   
 
 .circle {
-  width: 4vw; /* Utilise 4% de la largeur de la vue pour chaque pion */
-  height: 4vw; /* Utilise 4% de la hauteur de la vue pour chaque pion */
-  max-width: 30px; /* Taille maximale en pixels */
-  max-height: 30px; /* Taille maximale en pixels */
+  min-width: 30px; 
+  min-height: 30px;
+  max-width: 30px;
+  max-height: 30px;
 }
 
 

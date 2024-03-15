@@ -17,6 +17,7 @@ export class PlayerVsAiPage implements OnInit {
   player1Score: number = 0;
   player2Score: number = 0;
   difficulty: string = '';
+  playerDisc: string = '';
 
   constructor(
     private apiService: ApiService,
@@ -52,6 +53,10 @@ export class PlayerVsAiPage implements OnInit {
     this.route.params.subscribe(params => {
       this.difficulty = params['difficulty'];
     })
+    // Disc
+    this.route.params.subscribe(params => {
+      this.playerDisc = params['playerDisc'];
+    })
   }
 
   ngOnDestroy() {
@@ -61,8 +66,8 @@ export class PlayerVsAiPage implements OnInit {
     }
   }
 
-  makeOneMove(difficulty: string) {
-    this.apiService.makeOneMove(difficulty).subscribe(
+  makeOneMove(playerDisc: string, difficulty: string, row: number, col: number) {
+    this.apiService.makeOneMove(playerDisc, difficulty, row, col).subscribe(
       (response) => {
         const winner = response.winner;
         if (winner) {
