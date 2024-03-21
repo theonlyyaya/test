@@ -49,9 +49,11 @@ export class OfflinePage implements OnInit {
     this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
       this.apiService.getBoard().subscribe(
         (board) => {
+          if (JSON.stringify(this.cells) !== JSON.stringify(board)){
+            this.toggleTurn(); // Change the turn after each move
+          }
           this.cells = board;
           this.updateScores();
-          this.toggleTurn(); // Change the turn after each move
           localStorage.setItem('reversi_board', JSON.stringify(board));
         },
         (error) => {
