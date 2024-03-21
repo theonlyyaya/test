@@ -23,6 +23,15 @@ export class ApiService {
     );
   }
 
+  getPossibleMoves(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/get_possible_moves`).pipe(
+      catchError((error) => {
+        console.error('Error fetching board:', error);
+        throw error;
+      })
+    );
+  }
+
   makeMove(row: number, col: number): Observable<any> {
     // Make the move and notify subscribers
     return this.http.post(`${this.apiUrl}/make_move`, { row, col }).pipe(

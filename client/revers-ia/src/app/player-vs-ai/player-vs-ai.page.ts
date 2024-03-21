@@ -125,6 +125,9 @@ export class PlayerVsAiPage implements OnInit {
     if (cell === 1) {
       return 'https://i.postimg.cc/HWRrXXx8/white-circle.png';
     }
+    if (cell === 2) {
+      return 'https://i.postimg.cc/mr2Q5Kbb/advise-circle.png';
+    }
     return '';
   }
   

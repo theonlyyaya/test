@@ -229,6 +229,10 @@ class ReversiApp(App):
 def get_board():
     return jsonify(reversi_game.board)
 
+@app.route('/api/get_possible_moves', methods=['GET'])
+def get_possible_moves():
+    return jsonify(get_legal_moves(reversi_game.board, reversi_game.current_player))
+
 
 @app.route('/api/make_move', methods=['POST'])
 def make_move():
