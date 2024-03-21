@@ -38,11 +38,11 @@ class DatabaseManager:
     # ============
 
     def insert(self, **column_value):
-        insert_query = sql.SQL("INSERT INTO {} ({}) VALUES ({})".format(
+        insert_query = sql.SQL("INSERT INTO {} ({}) VALUES ({})").format(
             sql.Identifier(self.table),
             sql.SQL(', ').join(map(sql.Identifier, column_value.keys())),
             sql.SQL(', ').join(sql.Placeholder() * len(column_value.values()))
-        ))
+        )
 
         record_to_insert = tuple(column_value.values())
         self.execute(insert_query, record_to_insert)

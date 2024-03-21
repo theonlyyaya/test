@@ -1,7 +1,7 @@
 
+from datetime import datetime
 from sympy import true
-from .databaseManager import DatabaseManager
-from entities.player import Player
+from databaseManager import DatabaseManager
 import hashlib
 
 DATABASE_USER = 'postgres'
@@ -9,7 +9,7 @@ DATABASE_PASSWORD = 'root'
 DATABASE_HOST = 'localhost'
 DATABASE_PORT = '5432'
 DATABASE_NAME = 'reversia'
-TABLE_NAME = 'Player'
+TABLE_NAME = 'players'
 TABLE_PK = 'id_player'
 
 player = DatabaseManager(
@@ -22,48 +22,9 @@ player = DatabaseManager(
     TABLE_PK
 )
 
+player.connect()
+
 #players_table = player.select_all()
-
-def addPlayer(player):
-    found = getPlayer(player.id_player)
-    if not found:
-        player.insert(dict(player))
-    return 0
-
-def getPlayer(id_player):
-    player = players_table.find_one(id=id_player)
-    if(player):
-        player = Player(**(player))
-    return player
-
-def logIn(email, password):
-    player = players_table.find_one(email=email)
-    if(player):
-        player = Player(**(player))
-        if(player.password == password):
-            return True
-    return False 
-
-def logIn(email, password):
-    player = players_table.find_one(email=email)
-
-def find_one(string):
-    return string
-
-
-def signIn(email, password):
-    """
-    Parameters
-    ----------
-    email,
-    password
-    """
-    player = players_table.find_one(email=email)
-    if(player):
-        player = Player(**(player))
-        if(password == player.password):
-            player.password = ''
-    return player
 
 def find_one(email):
     return player.select(["email"], email)
@@ -72,7 +33,13 @@ def signUp(email, password, confirmedPassword, pseudo):
     if confirmedPassword == password:
         encodedPassword = password.encode()
         hash1 = hashlib.md5(encodedPassword).hexdigest()
-        player.insert(email=email, password=hash1, pseudo=pseudo)
+        player.insert(
+            email=email,
+            password=hash1,
+            pseudo=pseudo,
+            created_at = datetime.now().strftime('%Y-%m-%d %H:%M:%S')     
+        )
+        return "oui"
     else:
         return "passwords are not the same!"
     
@@ -85,3 +52,8 @@ def logIn(email, password):
         return True
     else:
         return "wrong password!"
+    
+print(signUp("salut@something.com", "patate", "patate", "thib"))
+
+player.close(commit=True)
+player.close()
