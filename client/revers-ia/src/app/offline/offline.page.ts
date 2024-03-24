@@ -11,10 +11,11 @@ import { Subscription } from 'rxjs';
 })
 export class OfflinePage implements OnInit {
   cells: number[][] = [];
+  cells_moves: number[][] = [];
   private moveMadeSubscription: Subscription = new Subscription();
   player1Score: number = 0;
   player2Score: number = 0;
-  activePlayer: number = -1; // Par défaut, le joueur 1 est actif
+  activePlayer: number = -1; // Par défaut, le joueur -1 est actif
 
   constructor(
     private apiService: ApiService,
@@ -37,7 +38,17 @@ export class OfflinePage implements OnInit {
     this.apiService.getBoard().subscribe(
       (board) => {
         this.cells = board;
+        this.cells_moves = JSON.parse(JSON.stringify(this.cells));
         this.updateScores();
+      },
+      (error) => {
+        console.error('Error fetching board:', error);
+      }
+    );
+    this.apiService.getPossibleMoves().subscribe(
+      (possibleMoves) => {
+        for(let coordinates of possibleMoves)
+          this.cells_moves[coordinates[0]][coordinates[1]] = 2;
       },
       (error) => {
         console.error('Error fetching board:', error);
@@ -49,10 +60,22 @@ export class OfflinePage implements OnInit {
     this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
       this.apiService.getBoard().subscribe(
         (board) => {
+          if (JSON.stringify(this.cells) !== JSON.stringify(board)){
+            this.toggleTurn(); // Change the turn after each move
+          }
           this.cells = board;
+          this.cells_moves = JSON.parse(JSON.stringify(this.cells));
           this.updateScores();
-          this.toggleTurn(); // Change the turn after each move
           localStorage.setItem('reversi_board', JSON.stringify(board));
+        },
+        (error) => {
+          console.error('Error fetching board:', error);
+        }
+      );
+      this.apiService.getPossibleMoves().subscribe(
+        (possibleMoves) => {
+          for(let coordinates of possibleMoves)
+            this.cells_moves[coordinates[0]][coordinates[1]] = 2;   
         },
         (error) => {
           console.error('Error fetching board:', error);
@@ -65,12 +88,8 @@ export class OfflinePage implements OnInit {
     this.apiService.makeMove(row, col).subscribe(
       (response) => {
         const winner = response.winner;
-        if (winner) {
+        if (winner)
           this.displayWinnerMessage(winner);
-        } else {
-          // Continue with the game logic if there is no winner
-          this.initBoard();
-        }
       },
       (error) => {
         // Handle errors here
@@ -115,6 +134,9 @@ export class OfflinePage implements OnInit {
     }
     if (cell === 1) {
       return 'https://i.postimg.cc/HWRrXXx8/white-circle.png';
+    }
+    if (cell === 2) {
+      return 'https://i.postimg.cc/mr2Q5Kbb/advise-circle.png';
     }
     return '';
   }
