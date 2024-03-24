@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:5000/api';
+  private apiUrl = 'https://test-hcmmy3vx8-thatwasyahyas-projects.vercel.app/';
 
   // Subject to notify subscribers when a move is made
   private moveSubject = new Subject<void>();
