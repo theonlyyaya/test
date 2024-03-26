@@ -220,7 +220,7 @@ def make_one_move():
     data = request.get_json()
     difficulty = data['difficulty']
     playerDisc = data['playerDisc']
-    row, col = reversi_game.make_one_move(playerDisc, difficulty)
+    row, col = reversi_game.make_one_move(playerDisc, difficulty) # type: ignore
     if (row == -1 or col == -1):
         row = data['row']
         col = data['col']
