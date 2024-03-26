@@ -208,11 +208,11 @@ class ReversiGrid():
 
         conf = {}
         if (player == 'Easy'):
-            conf['player']= 'server\\api\\Easy.pt'
+            conf['player']= 'server\\Easy.pt'
         elif (player == 'Medium'):
-            conf['player']= 'server\\api\\Medium.pt'
+            conf['player']= 'server\\Medium.pt'
         elif (player == 'Hard'):
-            conf['player']= 'server\\api\\models\\Hard.pt'
+            conf['player']= 'server\\models\\Hard.pt'
         
         model = torch.load(conf['player'],map_location=torch.device('cpu'))
         model.eval()
@@ -256,20 +256,18 @@ class ReversiGrid():
             
 
 # Crée une instance du jeu Reversi
-reversi_game = ReversiGrid() 
-
+reversi_game = ReversiGrid()    
     
-    
-@app.route('/api/get_board', methods=['GET'])
+@app.route('/get_board', methods=['GET'])
 def get_board():
     return jsonify(reversi_game.board)
 
-@app.route('/api/get_possible_moves', methods=['GET'])
+@app.route('/get_possible_moves', methods=['GET'])
 def get_possible_moves():
     return jsonify(get_legal_moves(reversi_game.board, reversi_game.current_player))
 
 
-@app.route('/api/make_move', methods=['POST'])
+@app.route('/make_move', methods=['POST'])
 def make_move():
     data = request.get_json()
     row = data['row']
@@ -288,7 +286,7 @@ def make_move():
     return response
 
 
-@app.route('/api/make_one_move', methods=['POST'])
+@app.route('/make_one_move', methods=['POST'])
 def make_one_move():
     data = request.get_json()
     difficulty = data['difficulty']
@@ -310,7 +308,7 @@ def make_one_move():
     return response
 
 
-@app.route('/api/reload', methods=['GET'])
+@app.route('/reload', methods=['GET'])
 def reload():
     reversi_game.reload()
     return jsonify(reversi_game.board)
