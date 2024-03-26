@@ -11,9 +11,14 @@ export class Tab1Page {
 
   constructor(private router: Router) {}
 
+  redirectToUserPage() {
+    this.router.navigate(['/user']);// Rediriger vers la page de connexion
+  }
+
   goToOfflinePage() {
     this.router.navigate(['/offline']); // Remplace '/offline' par le chemin de ta page "offline"
   }
+
   GoToChoosePlayerDisc() {
     this.router.navigate(['/choose-disc']);
   }

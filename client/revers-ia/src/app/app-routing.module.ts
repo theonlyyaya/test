@@ -30,6 +30,18 @@ const routes: Routes = [
     path: 'choose-ai-difficulty-vs-player',
     loadChildren: () => import('./choose-ai-difficulty-vs-player/choose-ai-difficulty-vs-player.module').then( m => m.ChooseAiDifficultyVsPlayerPageModule)
   },
+  {
+    path: 'user',
+    loadChildren: () => import('./user/user.module').then( m => m.UserPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'signup',
+    loadChildren: () => import('./signup/signup.module').then( m => m.SignupPageModule)
+  },
 
 ];
 @NgModule({

@@ -1,0 +1,15 @@
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  ion-button {
+    margin-bottom: 10px;
+  }
+  
+  ion-content {
+    --background: #208D3F; 
+  }
