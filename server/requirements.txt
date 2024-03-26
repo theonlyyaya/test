@@ -8,6 +8,5 @@ torch
 scipy
 h5py
 tqdm
-kivy
 
 
