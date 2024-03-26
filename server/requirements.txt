@@ -2,8 +2,8 @@ numpy
 pandas
 scikit-learn
 flask
-flask_restful
-flask_cors
+flask-restful
+flask-cors
 torch
 scipy
 h5py
