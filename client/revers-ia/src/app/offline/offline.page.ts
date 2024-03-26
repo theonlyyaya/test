@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { ApiService } from '../services/api.service';
 import { AlertController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-offline',
@@ -10,8 +12,8 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class OfflinePage implements OnInit {
-  cells: number[][] = [];
-  cells_moves: number[][] = [];
+  cells: number[][] = []; // les cellules sans les mouvements legaux
+  cells_moves: number[][] = []; // les cellules avec les mouvements legaux
   private moveMadeSubscription: Subscription = new Subscription();
   player1Score: number = 0;
   player2Score: number = 0;
@@ -19,12 +21,56 @@ export class OfflinePage implements OnInit {
 
   constructor(
     private apiService: ApiService,
+    private router: Router,
     private alertController: AlertController  ) {}
 
   ngOnInit() {
     // Initialize the board and subscribe to move events
-    this.initBoard();
-    this.subscribeToMoves();
+    this.apiService.getBoard().subscribe(
+      (board) => {
+        this.cells = board;
+        this.cells_moves = JSON.parse(JSON.stringify(this.cells));
+        this.apiService.getPossibleMoves().subscribe(
+          (possibleMoves) => {
+            for(let coordinates of possibleMoves)
+              this.cells_moves[coordinates[0]][coordinates[1]] = 2;
+          },
+          (error) => {
+            console.error('Error fetching board:', error);
+          }
+        );
+        this.updateScores();
+      },
+      (error) => {
+        console.error('Error fetching board:', error);
+      }
+    );
+
+    this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
+      this.apiService.getBoard().subscribe(
+        (board) => {
+          if (JSON.stringify(this.cells) !== JSON.stringify(board)){
+            this.cells = board;
+            this.cells_moves = JSON.parse(JSON.stringify(this.cells));
+            this.apiService.getPossibleMoves().subscribe( // recuperer mouvements legaux
+              (possibleMoves) => {
+                for(let coordinates of possibleMoves)
+                  this.cells_moves[coordinates[0]][coordinates[1]] = 2;   
+              },
+              (error) => {
+                console.error('Error fetching board:', error);
+              }
+            );
+            this.updateScores(); // renouvelle score
+            this.toggleTurn(); // Change the turn after each move
+            localStorage.setItem('reversi_board', JSON.stringify(board));
+        }
+        },
+        (error) => {
+          console.error('Error fetching board:', error);
+        }
+      );
+    });
   }
 
   ngOnDestroy() {
@@ -32,56 +78,6 @@ export class OfflinePage implements OnInit {
     if (this.moveMadeSubscription) {
       this.moveMadeSubscription.unsubscribe();
     }
-  }
-
-  initBoard() {
-    this.apiService.getBoard().subscribe(
-      (board) => {
-        this.cells = board;
-        this.cells_moves = JSON.parse(JSON.stringify(this.cells));
-        this.updateScores();
-      },
-      (error) => {
-        console.error('Error fetching board:', error);
-      }
-    );
-    this.apiService.getPossibleMoves().subscribe(
-      (possibleMoves) => {
-        for(let coordinates of possibleMoves)
-          this.cells_moves[coordinates[0]][coordinates[1]] = 2;
-      },
-      (error) => {
-        console.error('Error fetching board:', error);
-      }
-    );
-  }
-
-  subscribeToMoves() {
-    this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
-      this.apiService.getBoard().subscribe(
-        (board) => {
-          if (JSON.stringify(this.cells) !== JSON.stringify(board)){
-            this.toggleTurn(); // Change the turn after each move
-          }
-          this.cells = board;
-          this.cells_moves = JSON.parse(JSON.stringify(this.cells));
-          this.updateScores();
-          localStorage.setItem('reversi_board', JSON.stringify(board));
-        },
-        (error) => {
-          console.error('Error fetching board:', error);
-        }
-      );
-      this.apiService.getPossibleMoves().subscribe(
-        (possibleMoves) => {
-          for(let coordinates of possibleMoves)
-            this.cells_moves[coordinates[0]][coordinates[1]] = 2;   
-        },
-        (error) => {
-          console.error('Error fetching board:', error);
-        }
-      );
-    });
   }
 
   makeMove(row: number, col: number) {
@@ -140,4 +136,19 @@ export class OfflinePage implements OnInit {
     }
     return '';
   }
-}
+
+  goHome() {
+    this.router.navigate(['/tabs/tab1']);
+  }
+
+  reload() {
+    this.apiService.reload().subscribe(
+      (error) => {
+        // Handle errors here
+        console.error('Error making move:', error);
+      }
+    );
+  }
+}   
+
+

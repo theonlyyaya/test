@@ -1,11 +1,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from kivy.app import App
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
-from kivy.uix.popup import Popup
-from kivy.uix.label import Label
-from kivy.clock import Clock
+
+
+
 import numpy as np
 import copy
 import time
@@ -61,40 +58,24 @@ def find_best_move(move1_prob,legal_moves):
     return best_move
 
 
-class ReversiGrid(GridLayout):
-    def __init__(self, **kwargs):
-        super(ReversiGrid, self).__init__(**kwargs)
+class ReversiGrid():
+    def __init__(self):
         self.cols = 8
         self.rows = 8
         self.board = [[0 for _ in range(8)] for _ in range(8)]
         self.current_player = -1 # -1 is black, 1 is white
-        self.create_board()
         self.place_initial_pieces()
 
-    def create_board(self):
-        for row in range(8):
-            for col in range(8):
-                cell = Button(background_color=(1, 1.8, 1, 1.8))  # Light green background
-                cell.bind(on_press=self.make_move) # type: ignore
-                
-                if self.board[row][col] == -1:
-                    cell.background_normal = 'black_circle.png'
-                elif self.board[row][col] == 1:
-                    cell.background_normal = 'white_circle.png'
-                
-                self.add_widget(cell)
+    def reload(self):
+        self.board = [[0 for _ in range(8)] for _ in range(8)]
+        self.current_player = -1 # -1 is black, 1 is white
+        self.place_initial_pieces()
 
     def place_initial_pieces(self):
         self.board[3][3] = 1
         self.board[4][4] = 1
         self.board[3][4] = -1
         self.board[4][3] = -1
-        for i, child in enumerate(reversed(self.children)):
-            row, col = self.get_coords(child)
-            if (row, col) in [(3, 3), (4, 4)]:
-                child.background_normal = 'white_circle.png'
-            elif (row, col) in [(3, 4), (4, 3)]:
-                child.background_normal = 'black_circle.png'
 
     def get_coords(self, instance):
         index = self.children.index(instance)
@@ -122,19 +103,12 @@ class ReversiGrid(GridLayout):
 
         return valid_move
 
-    def update_board(self):
-        for i, child in enumerate(reversed(self.children)):
-            row, col = self.get_coords(child)
-            if self.board[row][col] == -1:
-                child.background_normal = 'black_circle.png'  
-            elif self.board[row][col] == 1:
-                child.background_normal = 'white_circle.png' 
+
     
     def make_move(self, row, col):
         if self.is_valid_move(row, col):
             self.board[row][col] = self.current_player
             self.flip_pieces(row, col)
-            self.update_board()
             self.current_player = -1 if self.current_player == 1 else 1
             black_count, white_count = self.count_pieces()
 
@@ -143,8 +117,6 @@ class ReversiGrid(GridLayout):
                 black_count, white_count = self.count_pieces()
                 winner = "Black" if black_count > white_count else "White" if white_count > black_count else "Draw"
 
-                # Use Clock to schedule the UI update on the main thread
-                Clock.schedule_once(lambda dt: self.show_winner_popup(winner), 0)
 
                 # Return the result with winner information
                 return {"success": True, "winner": winner}
@@ -190,13 +162,6 @@ class ReversiGrid(GridLayout):
                 print(f"White: {best_move} < from possible move {legal_moves}")
             return best_move
     
-    def show_winner_popup(self, winner):
-        # Show the winner information on the main thread
-        winner_text = f"The winner is {winner}!"
-        popup_content = Label(text=winner_text)
-        popup = Popup(title="Game Over", content=popup_content, size_hint=(None, None), size=(400, 200))
-        popup.open()
-
 
     def flip_pieces(self, row, col):
         directions = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
@@ -220,9 +185,6 @@ class ReversiGrid(GridLayout):
 # Crée une instance du jeu Reversi
 reversi_game = ReversiGrid() 
 
-class ReversiApp(App):
-    def build(self):
-        return ReversiGrid()
     
     
 @app.route('/api/get_board', methods=['GET'])
@@ -274,6 +236,11 @@ def make_one_move():
 
     return response
 
+
+@app.route('/api/reload', methods=['POST'])
+def reload():
+    reversi_game.reload()
+    return jsonify(reversi_game.board)
 
 if __name__ == "__main__":
     reversi_game = ReversiGrid()

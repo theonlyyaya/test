@@ -23,6 +23,15 @@ export class ApiService {
     );
   }
 
+  reload(): Observable<any> {
+    // Make the move and notify subscribers
+    return this.http.post(`${this.apiUrl}/reload`, {}).pipe(
+      tap(() => {
+        this.moveSubject.next();
+      })
+    );
+  }
+
   getPossibleMoves(): Observable<any> {
     return this.http.get(`${this.apiUrl}/get_possible_moves`).pipe(
       catchError((error) => {
