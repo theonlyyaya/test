@@ -13,9 +13,11 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class PlayerVsAiPage implements OnInit {
   cells: number[][] = [];
+  cells_moves: number[][] = [];
   private moveMadeSubscription: Subscription = new Subscription();
   player1Score: number = 0;
   player2Score: number = 0;
+  activePlayer: number = -1; // Par défaut, le joueur -1 est actif
   difficulty: string = '';
   playerDisc: string = '';
 
@@ -30,6 +32,8 @@ export class PlayerVsAiPage implements OnInit {
     this.apiService.getBoard().subscribe(
       (board) => {
         this.cells = board;
+        this.cells_moves = JSON.parse(JSON.stringify(this.cells));
+        this.updateScores();
       },
       (error) => {
         console.error('Error fetching board:', error);
@@ -39,15 +43,29 @@ export class PlayerVsAiPage implements OnInit {
     this.moveMadeSubscription = this.apiService.onMoveMade().subscribe(() => {
       this.apiService.getBoard().subscribe(
         (board) => {
+          if (JSON.stringify(this.cells) !== JSON.stringify(board)){
+            this.toggleTurn(); // Change the turn after each move
+          }
           this.cells = board;
+          this.cells_moves = JSON.parse(JSON.stringify(this.cells));
           this.updateScores();
-          this.changeDetectorRef.markForCheck(); // This marks the component for check
           localStorage.setItem('reversi_board', JSON.stringify(board));
         },
         (error) => {
           console.error('Error fetching board:', error);
         }
       );
+      if ((this.playerDisc === 'Black' && this.activePlayer === -1) || (this.playerDisc === 'White' && this.activePlayer === 1)){
+        this.apiService.getPossibleMoves().subscribe(
+          (possibleMoves) => {
+            for(let coordinates of possibleMoves)
+              this.cells_moves[coordinates[0]][coordinates[1]] = 2;   
+          },
+          (error) => {
+            console.error('Error fetching board:', error);
+          }
+        );
+      }
     });
     // Difficulty chosen at choose-ai-difficulty-vs-player.page
     this.route.params.subscribe(params => {
@@ -84,6 +102,17 @@ export class PlayerVsAiPage implements OnInit {
               console.error('Error fetching board:', error);
             }
           );
+          if ((this.playerDisc === 'Black' && this.activePlayer === -1) || (this.playerDisc === 'White' && this.activePlayer === 1)){
+            this.apiService.getPossibleMoves().subscribe(
+              (possibleMoves) => {
+                for(let coordinates of possibleMoves)
+                  this.cells_moves[coordinates[0]][coordinates[1]] = 2;   
+              },
+              (error) => {
+                console.error('Error fetching board:', error);
+              }
+            );
+          }
         }
       },
       (error) => {
@@ -102,6 +131,11 @@ export class PlayerVsAiPage implements OnInit {
     return this.cells.reduce((count, row) => count + row.filter((cell) => cell === player).length, 0);
   }
 
+  toggleTurn() {
+    // Changer le joueur actif
+    this.activePlayer *= -1;
+  }
+
   displayWinnerMessage(winner: string) {
     this.alertController.create({
       header: 'Game Over',
@@ -110,6 +144,12 @@ export class PlayerVsAiPage implements OnInit {
         {
           text: 'Play Again',
           handler: () => {
+            this.apiService.reload().subscribe(
+              (error) => {
+                // Handle errors here
+                console.error('Error making move:', error);
+              }
+            );
             location.reload();
           },
         },

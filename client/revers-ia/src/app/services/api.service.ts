@@ -7,7 +7,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'https://testdeploy-zkvz.onrender.com';
+  private apiUrl = 'https://testdeploy-zkvz.onrender.com'; // local: http://localhost:5000/api || online: https://testdeploy-zkvz.onrender.com
 
   // Subject to notify subscribers when a move is made
   private moveSubject = new Subject<void>();
@@ -25,7 +25,7 @@ export class ApiService {
 
   reload(): Observable<any> {
     // Make the move and notify subscribers
-    return this.http.post(`${this.apiUrl}/reload`, {}).pipe(
+    return this.http.get(`${this.apiUrl}/reload`, {}).pipe(
       tap(() => {
         this.moveSubject.next();
       })
