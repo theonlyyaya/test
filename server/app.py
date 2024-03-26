@@ -141,9 +141,7 @@ class ReversiGrid():
     def __init__(self):
         self.cols = 8
         self.rows = 8
-        self.board = [[0 for _ in range(8)] for _ in range(8)]
-        self.current_player = -1 # -1 is black, 1 is white
-        self.place_initial_pieces()
+        reload()
 
     def reload(self):
         self.board = [[0 for _ in range(8)] for _ in range(8)]
@@ -208,11 +206,11 @@ class ReversiGrid():
 
         conf = {}
         if (player == 'Easy'):
-            conf['player']= 'server\\Easy.pt'
+            conf['player']= ''
         elif (player == 'Medium'):
-            conf['player']= 'server\\Medium.pt'
+            conf['player']= ''
         elif (player == 'Hard'):
-            conf['player']= 'server\\models\\Hard.pt'
+            conf['player']= 'models\\Hard.pt'
         
         model = torch.load(conf['player'],map_location=torch.device('cpu'))
         model.eval()
