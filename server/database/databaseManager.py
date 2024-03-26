@@ -15,14 +15,16 @@ class DatabaseManager:
         try:
             self.conn = psycopg2.connect(
                 host = self.host,
-                database = self.dbname,
+                dbname = self.dbname,
+                port = self.port,
                 user = self.user,
-                password = self.password
+                password = self.password,
             )
             self.cur = self.conn.cursor()
             print("\n-# Connection & transaction with PostgreSQL : ON\n")
         except(Exception, psycopg2.Error) as error:
             print("Error while connecting to PostgreSQL : ", error)
+            sys.exit()
 
     def execute(self, query, placeHolderValues = None):
         self.check_connection()
@@ -57,16 +59,21 @@ class DatabaseManager:
             self.execute(select_query)
         else:
             select_query = sql.SQL("SELECT {} FROM {} WHERE {} = {}").format(
-                sql.SQL(', ').join(map(sql.Identifier, columns)),
+                sql.SQL(',').join(map(sql.Identifier, columns)),
                 sql.Identifier(self.table),
                 sql.Placeholder(),
                 sql.Placeholder()
             )   
 
-            self.execute(select_query, (searchKey, searchKeyValue))
-        
-        selected = self.cur.fetchall()
-        return selected
+            self.execute(select_query, (searchKey, searchKeyValue))   
+        try: 
+            selected = self.cur.fetchall()
+        except psycopg2.ProgrammingError as error:
+            selected = '# ERROR:' + str(error)
+        else:
+            print(selected)
+            print("rowcount : ", self.cur.rowcount)
+            return selected
 
     def select_all(self):
         select_querry = sql.SQL("SELECT * FROM {}").format(
