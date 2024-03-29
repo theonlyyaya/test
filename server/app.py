@@ -250,9 +250,13 @@ class ReversiGrid():
 reversi_game = ReversiGrid()
 
 
+# Inside the get_board() function
 @app.route('/get_board', methods=['GET'])
 def get_board():
-    return jsonify(reversi_game.board)
+    # Convert NumPy array to list
+    board_list = reversi_game.board.tolist()
+    return jsonify(board_list)
+
 
 
 @app.route('/get_possible_moves', methods=['GET'])
