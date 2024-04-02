@@ -13,12 +13,12 @@ export class UserPage implements OnInit {
   ngOnInit() {
   }
 
-  login() {
+  goToLogin() {
     // Rediriger vers la page de connexion
     this.router.navigate(['/login']);
   }
 
-  signup() {
+  goToSignup() {
     // Rediriger vers la page d'inscription
     this.router.navigate(['/signup']);
   }

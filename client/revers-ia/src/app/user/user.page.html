@@ -1,25 +1,16 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>user</ion-title>
+    <ion-title>User</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-header [translucent]="true">
-        <ion-toolbar>
-          <ion-title>User</ion-title>
-        </ion-toolbar>
-      </ion-header>
       
       <ion-content>
         <div class="button-container">
-          <ion-button expand="block" (click)="login()">Log In</ion-button>
-          <ion-button expand="block" (click)="signup()">Sign Up</ion-button>
+          <ion-button (click)="goToLogin()" shape="round">Log In</ion-button>
+          <ion-button (click)="goToSignup()" shape="round">Sign Up</ion-button>
         </div>
       </ion-content>
             
-    </ion-toolbar>
-  </ion-header>
 </ion-content>
