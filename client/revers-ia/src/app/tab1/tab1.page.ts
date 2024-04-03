@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { PopoverController } from '@ionic/angular';
+import { ProfilePopupComponent } from '../components/profile-popup/popup.component';
 
 @Component({
   selector: 'app-tab1',
@@ -9,11 +11,7 @@ import { Router } from '@angular/router';
 
 export class Tab1Page {
 
-  constructor(private router: Router) {}
-
-  redirectToUserPage() {
-    this.router.navigate(['/user']);// Rediriger vers la page de connexion
-  }
+  constructor(private router: Router, public popoverController: PopoverController) {}
 
   goToOfflinePage() {
     this.router.navigate(['/offline']); // Remplace '/offline' par le chemin de ta page "offline"
@@ -30,4 +28,14 @@ export class Tab1Page {
   goToHowToPlay() {
     this.router.navigate(['/how-to-play']); // Remplace '/how-to-play' par le chemin de ta page "how-to-play"
   }
+
+  async openProfilePopup() {
+    const popover = await this.popoverController.create({
+      component: ProfilePopupComponent,
+      translucent: true,
+      cssClass: 'profile-popup-class' // Définissez une classe CSS pour personnaliser l'apparence du popup
+    });
+    return await popover.present();
+  }
+
 }
