@@ -308,7 +308,7 @@ def make_one_move():
     return response
 
 
-@app.route('/reload', methods=['GET'])
+@app.route('/reload', methods=['POST'])
 def reload():
     reversi_game.reload()
     return jsonify(reversi_game.board)

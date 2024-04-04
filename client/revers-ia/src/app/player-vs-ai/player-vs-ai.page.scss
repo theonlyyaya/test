@@ -22,13 +22,14 @@ ion-content {
 }
   
 
-/* Add this style to your global styles or component-specific styles */
-
 .game-board {
   margin: auto;
-  min-width: 515px;
-  max-width: 515px;
+  width: 80vw; /* Utilise 80% de la largeur de la vue */
+  height: 80vw; /* Utilise 80% de la hauteur de la vue */
+  max-width: 515px; /* Taille maximale en pixels */
+  max-height: 515px; /* Taille maximale en pixels */
 }
+
 
 ion-button {
   width: 100%;
@@ -50,7 +51,7 @@ ion-button.white {
 
 ion-toolbar {
   background-color: #333; /* Dark background color for the toolbar */
-  color: #f0f0f0; /* Light text color for the toolbar */
+  color: #252525; /* Light text color for the toolbar */
 }
 
 ion-label {
@@ -59,9 +60,6 @@ ion-label {
   margin-bottom: 10px;
 }
 
-.round-profile-button {
-  --border-radius: 50%;
-}
 
 
 ion-content {
@@ -77,7 +75,7 @@ ion-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px; // espace entre la barre d'en-tête et le plateau de jeu
+    margin-top: 60px; // espace entre la barre d'en-tête et le plateau de jeu
   }
 
   ion-row {
@@ -87,43 +85,35 @@ ion-content {
   }
 
   ion-col {
-    padding: 5px; // espace entre les cellules
+    padding: 1px; // espace entre les cellules
   }
 
   ion-button {
     height: 50px;
   }
+ 
+} 
 
-  .scores {
-    margin-top: 20px; // espace entre le plateau de jeu et les scores
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  
-    div {
-      margin-bottom: 10px; // espace entre les scores
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: #d8c4c4; // couleur de fond grise claire
-      padding: 10px; // espacement interne
-      border-radius: 10px;
-      width: fit-content;
-      
-      ion-label {
-        margin-right: 10px; // espace entre l'étiquette et le score
-        font-weight: bold; // texte en gras
-      }
+.container {
+  display: flex;
+  margin-top: 20px; 
+  text-align: center;
+  justify-content: center;
+  justify-content: space-between;
+  margin-inline: 10%;
+
+    .player-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #208D3F;
+      box-shadow: 0 0 5px #19692f;
+      margin-bottom: 5%;
     }
-  }  
-  
-  .players {
-    margin-top: 20px; // espace entre le plateau de jeu et les scores
-    text-align: center;
-  
-    h2 {
+    
+    .player1 h3 {
       display: flex;
+      color: #f0f0f0;
       align-items: center;
       justify-content: center;
       background-color: #000000; // couleur de fond grise claire
@@ -131,16 +121,68 @@ ion-content {
       border-radius: 10px;
       margin: 0 auto; // Centrer horizontalement
       width: fit-content;
-  
-      ion-label {
-        margin-right: 10px; // espace entre l'étiquette et le score
-        font-weight: bold; // texte en gras
+      position: absolute;
+    }
+
+    .player2 h3 {
+      display: flex;
+      color: #000000;
+      align-items: center;
+      justify-content: center;
+      background-color: #fafafa; // couleur de fond grise claire
+      padding: 10px; // espacement interne
+      border-radius: 10px;
+      margin: 0 auto; // Centrer horizontalement
+      width: fit-content;
+      position: absolute;
+      right:10%;
+    }
+
+    .player-info {
+      display: flex;
+      justify-content: center;
+
+      .player-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 15px solid yellow; /* Couleur de la flèche */
+      }
+      
+      .player1-arrow {
+        top: 13.2%; /* Position de la flèche par rapport au joueur 1 */
+        rotate: 270deg;
+        right: 50%;
+      }
+      
+      .player2-arrow {
+        top: 13.2%;  /* Position de la flèche par rapport au joueur 2 */
+        rotate: 90deg;
+        left:50%;
+      }  
+    
+      .score {
+        font-size: larger;
+        color: #f0f0f0;
+        font-weight: bolder;
+        width: 4rem; /* Largeur fixe en utilisant rem */
+        display: inline-block;
+        vertical-align: middle;
+        line-height: 32px; /* Centrer verticalement */
+        height: 35px;
+        margin-inline: 10%;
+        margin-top: auto;
+        margin-bottom: auto;
+        padding:2px;
+        background-color:#5c80f5 ;
+        border-radius: 50%;
+        box-shadow: 0 0 5px #19692f;
       }
     }
-  }
-  
 }
-
+  
 
 .circle {
   min-width: 30px; 
@@ -149,10 +191,11 @@ ion-content {
   max-height: 30px;
 }
 
+
 .cell {
-  min-width: 50px; 
-  min-height: 50px;
-  max-width: 50px;
-  max-height: 50px;
+  width: 8vw; /* Utilise 8% de la largeur de la vue pour chaque cellule */
+  height: 8vw; /* Utilise 8% de la hauteur de la vue pour chaque cellule */
+  max-width: 50px; /* Taille maximale en pixels */
+  max-height: 50px; /* Taille maximale en pixels */
 }
 

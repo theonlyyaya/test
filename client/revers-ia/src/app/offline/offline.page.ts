@@ -63,7 +63,7 @@ export class OfflinePage implements OnInit {
             );
             this.updateScores(); // renouvelle score
             this.toggleTurn(); // Change the turn after each move
-            localStorage.setItem('reversi_board', JSON.stringify(board));
+            //localStorage.setItem('reversi_board', JSON.stringify(board));
         }
         },
         (error) => {
@@ -81,17 +81,19 @@ export class OfflinePage implements OnInit {
   }
 
   makeMove(row: number, col: number) {
-    this.apiService.makeMove(row, col).subscribe(
-      (response) => {
-        const winner = response.winner;
-        if (winner)
-          this.displayWinnerMessage(winner);
-      },
-      (error) => {
-        // Handle errors here
-        console.error('Error making move:', error);
-      }
-    );
+    if (this.cells_moves[row][col] === 2){
+      this.apiService.makeMove(row, col).subscribe(
+        (response) => {
+          const winner = response.winner;
+          if (winner)
+            this.displayWinnerMessage(winner);
+        },
+        (error) => {
+          // Handle errors here
+          console.error('Error making move:', error);
+        }
+      );  
+    }
   }
 
   updateScores() {
@@ -142,12 +144,17 @@ export class OfflinePage implements OnInit {
   }
 
   reload() {
+    // toggle will be activated so initial state is -1 as expected
+    this.cells = [];
+    this.activePlayer = 1; 
+
     this.apiService.reload().subscribe(
       (error) => {
         // Handle errors here
         console.error('Error making move:', error);
       }
     );
+  
   }
 }   
 

@@ -26,7 +26,7 @@ export class ApiService {
 
   reload(): Observable<any> {
     // Make the move and notify subscribers
-    return this.http.get<any>(`${this.apiUrl}/reload`, {}).pipe(
+    return this.http.post<any>(`${this.apiUrl}/reload`, {}).pipe(
       tap(() => {
         this.moveSubject.next();
       })
