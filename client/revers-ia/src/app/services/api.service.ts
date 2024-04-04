@@ -10,8 +10,6 @@ export class ApiService {
   //private apiUrl = 'https://projet4a.onrender.com'; // online
   private apiUrl = 'http://localhost:5000'; // local
   
-  //private apiUrl = 'https://projet4a.onrender.com'; // online
-  private apiUrl = 'http://localhost:5000'; // local
 
   // Subject to notify subscribers when a move is made
   private moveSubject = new Subject<void>();
