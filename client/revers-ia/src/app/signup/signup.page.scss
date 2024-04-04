@@ -29,6 +29,12 @@ ion-item {
   margin-bottom: 15px;
 }
 
+.centered-button-container {
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement si nécessaire */
+  height: 100%; /* Prenez toute la hauteur disponible si vous voulez un centrage vertical aussi */
+}
 .signup-button {
   --background: #000000;
   --color: #ffffff;
