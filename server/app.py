@@ -141,7 +141,9 @@ class ReversiGrid():
     def __init__(self):
         self.cols = 8
         self.rows = 8
-        reload()
+        self.board = [[0 for _ in range(8)] for _ in range(8)]
+        self.current_player = -1 # -1 is black, 1 is white
+        self.place_initial_pieces()
 
     def reload(self):
         self.board = [[0 for _ in range(8)] for _ in range(8)]
@@ -210,7 +212,7 @@ class ReversiGrid():
         elif (player == 'Medium'):
             conf['player']= ''
         elif (player == 'Hard'):
-            conf['player']= 'models\\Hard.pt'
+            conf['player']= 'server\\models\\Hard.pt'
         
         model = torch.load(conf['player'],map_location=torch.device('cpu'))
         model.eval()
@@ -306,7 +308,10 @@ def make_one_move():
     return response
 
 
-@app.route('/reload', methods=['GET'])
+@app.route('/reload', methods=['POST'])
 def reload():
     reversi_game.reload()
     return jsonify(reversi_game.board)
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)
