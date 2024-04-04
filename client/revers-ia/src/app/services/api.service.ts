@@ -7,8 +7,9 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ApiService {
-  //private apiUrl = 'https://projet4a.onrender.com'; // online
-  private apiUrl = 'http://localhost:5000'; // local
+  
+  private apiUrl = 'https://projet4a.onrender.com'; // online
+
   
 
   // Subject to notify subscribers when a move is made
