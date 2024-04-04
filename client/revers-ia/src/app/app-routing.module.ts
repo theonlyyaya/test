@@ -6,7 +6,8 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./tabs/tabs.module').then((m) => m.TabsPageModule),
-  },  {
+  },
+  {
     path: 'offline',
     loadChildren: () => import('./offline/offline.module').then( m => m.OfflinePageModule)
   },
@@ -29,6 +30,14 @@ const routes: Routes = [
   {
     path: 'choose-ai-difficulty-vs-player',
     loadChildren: () => import('./choose-ai-difficulty-vs-player/choose-ai-difficulty-vs-player.module').then( m => m.ChooseAiDifficultyVsPlayerPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'signup',
+    loadChildren: () => import('./signup/signup.module').then( m => m.SignupPageModule)
   },
 
 ];

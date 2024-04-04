@@ -1,13 +1,8 @@
 ion-header {
-  .round-profile-button{
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    --border-radius: 50%;
-    --background: #ffffff;
-    --box-shadow:var(--background)
-  }
   ion-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
     font-size: 40px;
   }
 }
