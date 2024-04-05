@@ -1,0 +1,33 @@
+ion-header {
+  ion-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 40px;
+  }
+}
+
+ion-content {
+    --background: #208D3F; 
+}
+
+
+.profile-picture {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+  
+    img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+  
+    input[type="file"] {
+      margin-top: 10px;
+    }
+  }
+  

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CountryService } from '../country.service';
+import { CountryService } from '../services/country.service';
 
 @Component({
   selector: 'app-signup',

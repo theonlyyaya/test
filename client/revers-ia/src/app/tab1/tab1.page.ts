@@ -30,12 +30,27 @@ export class Tab1Page {
   }
 
   async openProfilePopup() {
-    const popover = await this.popoverController.create({
-      component: ProfilePopupComponent,
-      translucent: true,
-      cssClass: 'profile-popup-class' // Définissez une classe CSS pour personnaliser l'apparence du popup
-    });
-    return await popover.present();
+    // Vérifiez si l'utilisateur est connecté
+    const isLoggedIn = this.isLoggedIn(); // Vous devez implémenter cette méthode pour vérifier si l'utilisateur est connecté
+
+    if (isLoggedIn) {
+      // Redirigez l'utilisateur vers la page de profil s'il est connecté
+      this.router.navigate(['/profile']);
+    } else {
+      // Affichez la popup de connexion
+      const popover = await this.popoverController.create({
+        component: ProfilePopupComponent,
+        translucent: true,
+      });
+      return await popover.present();
+    }
+  }
+
+  // Méthode pour vérifier si l'utilisateur est connecté
+  isLoggedIn(): boolean {
+    // Implémentez votre logique pour vérifier si l'utilisateur est connecté ou non
+    // Retourne vrai si l'utilisateur est connecté, sinon retourne faux
+    return false; // Par exemple, retourne toujours vrai pour le test
   }
 
 }
