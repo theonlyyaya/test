@@ -7,8 +7,10 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:5000/api';
-  //private apiUrl = 'http://192.168.43.44:5000/api';
+  
+  private apiUrl = 'https://projet4a.onrender.com'; // online
+
+  
 
   // Subject to notify subscribers when a move is made
   private moveSubject = new Subject<void>();
@@ -16,7 +18,25 @@ export class ApiService {
   constructor(private http: HttpClient) {}
 
   getBoard(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/get_board`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/get_board`).pipe(
+      catchError((error) => {
+        console.error('Error fetching board:', error);
+        throw error;
+      })
+    );
+  }
+
+  reload(): Observable<any> {
+    // Make the move and notify subscribers
+    return this.http.post<any>(`${this.apiUrl}/reload`, {}).pipe(
+      tap(() => {
+        this.moveSubject.next();
+      })
+    );
+  }
+
+  getPossibleMoves(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/get_possible_moves`).pipe(
       catchError((error) => {
         console.error('Error fetching board:', error);
         throw error;
@@ -26,7 +46,16 @@ export class ApiService {
 
   makeMove(row: number, col: number): Observable<any> {
     // Make the move and notify subscribers
-    return this.http.post(`${this.apiUrl}/make_move`, { row, col }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/make_move`, { row, col }).pipe(
+      tap(() => {
+        this.moveSubject.next();
+      })
+    );
+  }
+
+  makeOneMove(playerDisc: string, difficulty: string, row: number, col: number): Observable<any> {
+    // Make the move and notify subscribers
+    return this.http.post<any>(`${this.apiUrl}/make_one_move`, { playerDisc, difficulty, row, col }).pipe(
       tap(() => {
         this.moveSubject.next();
       })

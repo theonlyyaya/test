@@ -1,0 +1,36 @@
+/* login.page.scss */
+ion-content {
+  --background: #208D3F;
+}
+
+ion-list {
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Ajoute une ombre à la bordure */
+  padding: 20px;
+  background-color: #ffffff; /* Fond blanc */
+}
+
+ion-item {
+  --highlight-color-focused: transparent; /* Supprime la couleur de surbrillance au focus */
+}
+
+.centered-button-container {
+  display: flex;
+  justify-content: center; /* Centre horizontalement */
+  align-items: center; /* Centre verticalement si nécessaire */
+  height: 100%; /* Prenez toute la hauteur disponible si vous voulez un centrage vertical aussi */
+}
+
+ion-button{
+ -webkit-text-fill-color: #000000;
+}
+
+.login-button {
+  -webkit-text-fill-color: #ffffff;
+  --background: #000000; /* Fond noir */
+  --color: #ffffff; /* Texte blanc */
+  --border-radius: 30px; /* Bordure arrondie */
+  max-width:200px;
+  min-width:80px;
+  margin-top: 20px;
+}

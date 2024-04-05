@@ -1,0 +1,158 @@
+ion-header {
+  .round-profile-button{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    --border-radius: 50%;
+    --background: #ffffff;
+    --box-shadow:var(--background)
+  }
+  
+  ion-icon {
+    font-size: 40px;
+  }
+
+  ion-back-button { 
+    --color: black !important;
+  }
+}
+
+ion-content {
+  --background: #208D3F; 
+}
+  
+
+/* Add this style to your global styles or component-specific styles */
+
+.game-board {
+  margin: auto;
+  min-width: 515px;
+  max-width: 515px;
+}
+
+ion-button {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #f0f0f0; /* Light background color */
+  color: #333; /* Text color for the pieces */
+}
+
+ion-button.black {
+  background-color: #333; /* Black color for the black pieces */
+  color: #f0f0f0; /* Invert text color for better visibility */
+}
+
+ion-button.white {
+  background-color: #f0f0f0; /* White color for the white pieces */
+  color: #333; /* Invert text color for better visibility */
+}
+
+ion-toolbar {
+  background-color: #333; /* Dark background color for the toolbar */
+  color: #f0f0f0; /* Light text color for the toolbar */
+}
+
+ion-label {
+  display: block;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.round-profile-button {
+  --border-radius: 50%;
+}
+
+
+ion-content {
+  .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+
+  .game-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px; // espace entre la barre d'en-tête et le plateau de jeu
+  }
+
+  ion-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  ion-col {
+    padding: 5px; // espace entre les cellules
+  }
+
+  ion-button {
+    height: 50px;
+  }
+
+  .scores {
+    margin-top: 20px; // espace entre le plateau de jeu et les scores
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  
+    div {
+      margin-bottom: 10px; // espace entre les scores
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #d8c4c4; // couleur de fond grise claire
+      padding: 10px; // espacement interne
+      border-radius: 10px;
+      width: fit-content;
+      
+      ion-label {
+        margin-right: 10px; // espace entre l'étiquette et le score
+        font-weight: bold; // texte en gras
+      }
+    }
+  }  
+  
+  .players {
+    margin-top: 20px; // espace entre le plateau de jeu et les scores
+    text-align: center;
+  
+    h2 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #000000; // couleur de fond grise claire
+      padding: 10px; // espacement interne
+      border-radius: 10px;
+      margin: 0 auto; // Centrer horizontalement
+      width: fit-content;
+  
+      ion-label {
+        margin-right: 10px; // espace entre l'étiquette et le score
+        font-weight: bold; // texte en gras
+      }
+    }
+  }
+  
+}
+
+
+.circle {
+  min-width: 30px; 
+  min-height: 30px;
+  max-width: 30px;
+  max-height: 30px;
+}
+
+.cell {
+  min-width: 50px; 
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+}
+

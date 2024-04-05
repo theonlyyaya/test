@@ -1,0 +1,44 @@
+
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/"></ion-back-button>
+      </ion-buttons>
+      <ion-title size="large">AI VS AI</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <div class="players">
+      <div>
+        <h2>
+          Player 1 vs Player 2
+       </h2>
+      </div>
+    </div>
+
+    <div class="game-board">
+      <ion-row *ngFor="let row of cells; let i = index">
+        <ion-col *ngFor="let cell of row; let j = index">
+          <ion-button class="cell" (click)="makeMove(i, j)">
+            <img class="circle" [src]="getImagePath(cell)">
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div class="scores">
+      <div>
+        <ion-label>Player 1 (Black) Score: {{ player1Score }}</ion-label>
+      </div>
+      <div>
+        <ion-label>Player 2 (White) Score: {{ player2Score }}</ion-label>
+      </div>
+    </div>
+
+  </ion-content>
+
+</ion-content>
+
